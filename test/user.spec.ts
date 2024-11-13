@@ -3,7 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 
-describe('Testing Unit Test', () => {
+describe('User Controller Test', () => {
   let app: INestApplication;
 
   beforeEach(async () => {
@@ -15,7 +15,12 @@ describe('Testing Unit Test', () => {
     await app.init();
   });
 
-  it('/ (GET)', () => {
-    return request(app.getHttpServer()).get('/').expect(404);
+  describe('POST /api/users', () => {
+    it('should be return 400 when request is invalid', () => {
+      return request(app.getHttpServer())
+        .post('/api/users')
+        .send({ email: 'test', password: 'test' })
+        .expect(400);
+    });
   });
 });
