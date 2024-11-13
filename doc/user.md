@@ -11,7 +11,8 @@ Request Body :
     "email": "dev@hafizcaniago.my.id",
     "name": "Hafiz Caniago",
     "username": "hafigo",
-    "password": "secret"
+    "password": "secret",
+    "confirmPassword": "secret"
 }
 ```
 
@@ -20,8 +21,9 @@ Response Body (Success) :
 {
     "message": "User Created Successfully",
     "data": {
+        "email": "dev@hafizcaniago.my.id",
+        "name": "Hafiz Caniago",
         "username": "hafigo",
-        "email": "dev@hafizcaniago.my.id"
     }
 }
 ```
@@ -49,10 +51,11 @@ Request Body :
 Response Body (Success) :
 ```json
 {
+    "message": "Login Successfully!",
     "data": {
-        "email": "dev@hafizcaniago.my.id",
-        "name": "Hafiz Caniago",
         "username": "hafigo",
+        "name": "Hafiz Caniago",
+        "token": "xxYxFg52345623"
     }
 }
 ```
@@ -71,21 +74,14 @@ Endpoint : GET /api/users/current
 Headers:
 - authorization: token
 
-Request Body : 
-```json
-{
-    "username": "hafigo",
-    "password": "secret"
-}
-```
-
 Response Body (Success) :
 ```json
 {
+    "message": "Data Retrieved Successfully!",
     "data": {
-        "username": "hafigo",
+        "email": "dev@hafizcaniago.my.id",
         "name": "Hafiz Caniago",
-        "token": "xxYxFg52345623"
+        "username": "hafigo",
     }
 }
 ```
@@ -111,7 +107,8 @@ Request Body :
     "email": "dev@hafizcaniago.my.id",
     "name": "Hafiz Caniago",
     "username": "hafigo",
-    "password": "secret"
+    "password": "secret",
+    "confirmPassword": "secret"
 }
 ```
 
@@ -152,7 +149,7 @@ Response Body (Success) :
 Endpoint : GET /api/users/activate?email=
 
 Query Params :
-- email: string, required.
+- email: string (hash), required.
 
 Response Body (Success) :
 ```json
