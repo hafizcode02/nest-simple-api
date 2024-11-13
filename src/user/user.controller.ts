@@ -1,7 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { UserService } from './user.service';
-import { RegisterUserRequest, UserResponse } from 'src/model/user.model';
-import { JsonResponse } from 'src/model/json.model';
+import { RegisterUserRequest, UserResponse } from '../model/user.model';
+import { JsonResponse } from '../model/json.model';
 
 @Controller('/api/users')
 export class UserController {
