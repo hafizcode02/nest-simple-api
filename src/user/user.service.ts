@@ -6,6 +6,7 @@ import { RegisterUserRequest, UserResponse } from '../model/user.model';
 import { Logger } from 'winston';
 import { UserValidation } from './user.validation';
 import * as bcrypt from 'bcrypt';
+import { MailService } from 'src/common/mail.service';
 
 @Injectable()
 export class UserService {
@@ -13,6 +14,7 @@ export class UserService {
     private validationService: ValidationService,
     @Inject(WINSTON_MODULE_PROVIDER) private logger: Logger,
     private prismaService: PrismaService,
+    private mailService: MailService,
   ) {}
 
   async register(request: RegisterUserRequest): Promise<UserResponse> {
@@ -45,6 +47,13 @@ export class UserService {
     const user = await this.prismaService.user.create({
       data: userData,
     });
+
+    await this.mailService.sendMail(
+      'testapp@hafizcaniago.my.id',
+      userData.email,
+      'Welcome to Nest Simple API',
+      `Hello ${userData.name},\n\nWelcome to Nest Simple API!`,
+    );
 
     return {
       email: user.email,
