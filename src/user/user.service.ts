@@ -48,10 +48,12 @@ export class UserService {
       data: userData,
     });
 
-    await this.mailService.sendMail(
+    const verifyEmailUrl: string = 'https://google.com';
+
+    await this.mailService.sendVerificationEmail(
+      userData.name,
       userData.email,
-      'Welcome to Nest Simple API',
-      `<p>Hello <strong>${userData.name}</strong>,</p><p>Welcome to Nest Simple API!</p>`,
+      verifyEmailUrl,
     );
 
     return {

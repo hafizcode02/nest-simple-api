@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
+import { MailSubjectList, MailTemplate } from './mail.template';
 
 @Injectable()
 export class MailService {
@@ -19,7 +20,25 @@ export class MailService {
     } as SMTPTransport.Options);
   }
 
-  async sendMail(to: string, subject: string, html?: string) {
+  async sendWelcomeEmail(name: string, recipientEmail: string) {
+    const subject = MailSubjectList.WELCOME;
+    const html = MailTemplate.welcomeEmail(name);
+
+    await this.sendMail(recipientEmail, subject, html);
+  }
+
+  async sendVerificationEmail(
+    name: string,
+    recipientEmail: string,
+    verifyEmailLink: string,
+  ) {
+    const subject = MailSubjectList.VERIFY;
+    const html = MailTemplate.verifyEmail(name, verifyEmailLink);
+
+    await this.sendMail(recipientEmail, subject, html);
+  }
+
+  private async sendMail(to: string, subject: string, html?: string) {
     const mailOptions = {
       from: process.env.MAIL_USER,
       to,
