@@ -2,20 +2,21 @@ import { Injectable, Logger } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import { MailSubjectList, MailTemplate } from './mail.template';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class MailService {
   private readonly logger = new Logger(MailService.name);
   private transporter: nodemailer.Transporter<SMTPTransport.SentMessageInfo>;
 
-  constructor() {
+  constructor(private configService: ConfigService) {
     this.transporter = nodemailer.createTransport({
-      host: process.env.MAIL_HOST,
-      port: parseInt(process.env.MAIL_PORT),
-      secure: process.env.MAIL_SECURE === 'true',
+      host: this.configService.get<string>('MAIL_HOST'),
+      port: this.configService.get<number>('MAIL_PORT'),
+      secure: this.configService.get<boolean>('MAIL_SECURE'),
       auth: {
-        user: process.env.MAIL_USER,
-        pass: process.env.MAIL_PASS,
+        user: this.configService.get<string>('MAIL_USER'),
+        pass: this.configService.get<string>('MAIL_PASS'),
       },
     } as SMTPTransport.Options);
   }
@@ -40,7 +41,7 @@ export class MailService {
 
   private async sendMail(to: string, subject: string, html?: string) {
     const mailOptions = {
-      from: process.env.MAIL_USER,
+      from: this.configService.get('MAIL_USER'),
       to,
       subject,
       html,
