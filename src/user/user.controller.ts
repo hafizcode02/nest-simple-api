@@ -1,7 +1,8 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Req } from '@nestjs/common';
 import { UserService } from './user.service';
 import { RegisterUserRequest, UserResponse } from '../model/user.model';
 import { JsonResponse } from '../model/json.model';
+import { Request } from 'express';
 
 @Controller('/api/users')
 export class UserController {
@@ -9,9 +10,10 @@ export class UserController {
 
   @Post()
   async register(
+    @Req() expressReq: Request,
     @Body() request: RegisterUserRequest,
   ): Promise<JsonResponse<UserResponse>> {
-    const result = await this.userService.register(request);
+    const result = await this.userService.register(expressReq, request);
     return {
       data: result,
     };

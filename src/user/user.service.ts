@@ -1,4 +1,10 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  Req,
+} from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { PrismaService } from '../common/prisma.service';
 import { ValidationService } from '../common/validation.service';
@@ -7,6 +13,7 @@ import { Logger } from 'winston';
 import { UserValidation } from './user.validation';
 import * as bcrypt from 'bcrypt';
 import { MailService } from 'src/common/mail.service';
+import { Request } from 'express';
 
 @Injectable()
 export class UserService {
@@ -17,7 +24,10 @@ export class UserService {
     private mailService: MailService,
   ) {}
 
-  async register(request: RegisterUserRequest): Promise<UserResponse> {
+  async register(
+    @Req() expressReq: Request,
+    request: RegisterUserRequest,
+  ): Promise<UserResponse> {
     this.logger.info(`Registering user ${JSON.stringify(request)}`);
 
     const registerRequest: RegisterUserRequest =
@@ -48,7 +58,7 @@ export class UserService {
       data: userData,
     });
 
-    const verifyEmailUrl: string = 'https://google.com';
+    const verifyEmailUrl: string = `${expressReq.protocol}://${expressReq.get('host')}/api/users/verify-email?hashId`;
 
     await this.mailService.sendVerificationEmail(
       userData.name,
