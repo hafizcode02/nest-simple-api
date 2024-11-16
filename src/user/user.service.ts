@@ -12,8 +12,9 @@ import { RegisterUserRequest, UserResponse } from '../model/user.model';
 import { Logger } from 'winston';
 import { UserValidation } from './user.validation';
 import * as bcrypt from 'bcrypt';
-import { MailService } from 'src/common/mail.service';
+import { MailService } from '../common/mail.service';
 import { Request } from 'express';
+import { HashidService } from '../common/hashid.service';
 
 @Injectable()
 export class UserService {
@@ -22,6 +23,7 @@ export class UserService {
     @Inject(WINSTON_MODULE_PROVIDER) private logger: Logger,
     private prismaService: PrismaService,
     private mailService: MailService,
+    private hashIdService: HashidService,
   ) {}
 
   async register(
@@ -58,8 +60,8 @@ export class UserService {
       data: userData,
     });
 
-    const verifyEmailUrl: string = `${expressReq.protocol}://${expressReq.get('host')}/api/users/verify-email?hashId`;
-
+    const hashId = this.hashIdService.encode(user.id);
+    const verifyEmailUrl: string = `${expressReq.protocol}://${expressReq.get('host')}/api/users/verify-email/${hashId.toString()}`;
     await this.mailService.sendVerificationEmail(
       userData.name,
       userData.email,
@@ -71,5 +73,41 @@ export class UserService {
       username: user.username,
       name: user.name,
     };
+  }
+
+  async verifyEmail(hash: string): Promise<any> {
+    const id = this.hashIdService.decode(hash);
+
+    if (!id) {
+      throw new HttpException(
+        'Invalid verification link',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const user = await this.prismaService.user.findFirst({
+      where: {
+        id: id,
+      },
+    });
+
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+
+    if (user.isVerified) {
+      throw new HttpException('Email already verified', HttpStatus.BAD_REQUEST);
+    }
+
+    await this.prismaService.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        isVerified: true,
+      },
+    });
+
+    return 'Email Verified Successfully';
   }
 }

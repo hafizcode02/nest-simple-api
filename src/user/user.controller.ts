@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
 import { UserService } from './user.service';
 import { RegisterUserRequest, UserResponse } from '../model/user.model';
 import { JsonResponse } from '../model/json.model';
@@ -16,6 +16,14 @@ export class UserController {
     const result = await this.userService.register(expressReq, request);
     return {
       data: result,
+    };
+  }
+
+  @Get('/verify-email/:hash')
+  async verifyEmail(@Param('hash') hash: string): Promise<JsonResponse<any>> {
+    const result = await this.userService.verifyEmail(hash);
+    return {
+      message: result,
     };
   }
 }

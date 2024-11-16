@@ -7,6 +7,7 @@ import { ValidationService } from './validation.service';
 import { APP_FILTER } from '@nestjs/core';
 import { ExceptionService } from './exception.service';
 import { MailService } from './mail.service';
+import { HashidService } from './hashid.service';
 
 @Global()
 @Module({
@@ -38,7 +39,8 @@ import { MailService } from './mail.service';
       useClass: ExceptionService,
     },
     MailService,
+    HashidService,
   ],
-  exports: [PrismaService, ValidationService, MailService],
+  exports: [PrismaService, ValidationService, MailService, HashidService],
 })
 export class CommonModule {}
