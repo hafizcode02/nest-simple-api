@@ -14,22 +14,23 @@ datasource db {
 }
 
 enum Role {
-  USER
-  ADMIN
+  Admin
+  User
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  username  String    @unique @db.VarChar(100)
-  password  String    @db.VarChar(150)
-  name      String    @db.VarChar(100)
-  email     String    @unique @db.VarChar(100)
-  role      Role      @default(USER)
-  token     String?   @db.VarChar(150)
-  isActive  Boolean   @default(false)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  Contact   Contact[]
+  id         Int       @id @default(autoincrement())
+  username   String    @unique @db.VarChar(100)
+  password   String    @db.VarChar(150)
+  name       String    @db.VarChar(100)
+  email      String    @unique @db.VarChar(100)
+  role       Role      @default(User)
+  token      String?   @db.VarChar(150)
+  isActive   Boolean   @default(true)
+  isVerified Boolean   @default(false)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  Contact    Contact[]
 
   @@map("users")
 }
