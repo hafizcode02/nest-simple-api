@@ -19,18 +19,18 @@ export class MailService {
     } as SMTPTransport.Options);
   }
 
-  async sendMail(to: string, subject: string, text: string, html?: string) {
+  async sendMail(to: string, subject: string, html?: string) {
     const mailOptions = {
-      from: `"Your App Name" <${process.env.MAIL_USER}>`,
+      from: process.env.MAIL_USER,
       to,
       subject,
-      text,
       html,
     };
 
     try {
       const info = await this.transporter.sendMail(mailOptions);
       this.logger.log(`Email sent: ${info.messageId}`);
+      this.logger.log(`SMTP Response: ${JSON.stringify(info)}`);
       return info;
     } catch (error) {
       this.logger.error(`Failed to send email: ${error.message}`, error.stack);

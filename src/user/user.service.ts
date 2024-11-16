@@ -49,10 +49,9 @@ export class UserService {
     });
 
     await this.mailService.sendMail(
-      'testapp@hafizcaniago.my.id',
       userData.email,
       'Welcome to Nest Simple API',
-      `Hello ${userData.name},\n\nWelcome to Nest Simple API!`,
+      `<p>Hello <strong>${userData.name}</strong>,</p><p>Welcome to Nest Simple API!</p>`,
     );
 
     return {
