@@ -40,10 +40,10 @@ export class AuthMiddleware implements NestMiddleware {
 
       if (user) {
         req.user = user;
-      }
 
-      if (!this.isTokenExp(user.tokenExp)) {
-        throw new HttpException('Token expired', 401);
+        if (!this.isTokenExp(user.tokenExp)) {
+          throw new HttpException('Unauthorized', 401);
+        }
       }
     }
 

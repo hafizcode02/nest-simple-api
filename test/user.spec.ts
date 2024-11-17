@@ -144,4 +144,52 @@ describe('User Controller Test', () => {
       expect(response.body.data.emailSent).toBeUndefined();
     });
   });
+
+  describe('GET /api/users/current', () => {
+    beforeEach(async () => {
+      await testService.deleteUser();
+      await testService.createUser(true);
+    });
+
+    it('should be return 401 when token is invalid', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/api/users/current')
+        .set('Authorization', 'thisisinvalidtoken');
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(401);
+      expect(response.body.errors).toBeDefined();
+    });
+
+    it('should be return 200 when token is valid', async () => {
+      await testService.deleteUser();
+      const user = await testService.createUser(true);
+      const response = await request(app.getHttpServer())
+        .get('/api/users/current')
+        .set('Authorization', user.token);
+
+      logger.info(response.body);
+
+      expect(response.body.data.email).toBe('log@hafizcaniago.my.id');
+      expect(response.body.data.username).toBe('t.hafigo');
+      expect(response.body.data.name).toBe('Hafiz Caniago');
+    });
+
+    it('should be return 401 when token is expired', async () => {
+      await testService.deleteUser();
+      const user = await testService.createUser(true);
+      await testService.updateUserTokenExp();
+
+      const response = await request(app.getHttpServer())
+        .get('/api/users/current')
+        .set('Authorization', user.token);
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(401);
+      expect(response.body.errors).toBeDefined();
+      expect(response.body.errors).toBe('Unauthorized');
+    });
+  });
 });

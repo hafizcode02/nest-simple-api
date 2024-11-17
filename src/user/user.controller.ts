@@ -18,7 +18,7 @@ import { Request } from 'express';
 import { UseRole } from '../common/auth/role.decorator';
 import { User } from '@prisma/client';
 import { Role } from '../common/auth/role.enum';
-import { Auth } from 'src/common/auth/auth.decorator';
+import { Auth } from '../common/auth/auth.decorator';
 
 @Controller('/api/users')
 export class UserController {

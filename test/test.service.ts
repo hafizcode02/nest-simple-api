@@ -22,9 +22,24 @@ export class TestService {
         username: 't.hafigo',
         password: await bcrypt.hash('secret123', 10),
         isVerified: isVerified,
+        token: 'token',
+        tokenExp: new Date(new Date().getTime() + 1 * 60 * 1000),
       },
     });
 
     return createdUser;
+  }
+
+  async updateUserTokenExp() {
+    const updatedTokenExpiration = await this.prismaService.user.update({
+      where: {
+        email: 'log@hafizcaniago.my.id',
+      },
+      data: {
+        tokenExp: new Date(new Date().getTime() - 1 * 60 * 1000),
+      },
+    });
+
+    return updatedTokenExpiration;
   }
 }
