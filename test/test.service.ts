@@ -16,7 +16,7 @@ export class TestService {
   async createUser() {
     await this.prismaService.user.create({
       data: {
-        email: 't.dev@hafizcaniago.my.id',
+        email: 'log@hafizcaniago.my.id',
         name: 'Hafiz Caniago',
         username: 't.hafigo',
         password: 'secret123',

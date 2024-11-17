@@ -44,7 +44,7 @@ describe('User Controller Test', () => {
       const response = await request(app.getHttpServer())
         .post('/api/users')
         .send({
-          email: 'test@hafizcaniago.my.id',
+          email: 'log@hafizcaniago.my.id',
           name: 'Hafiz Caniago',
           username: 't.hafigo',
           password: 'secret123',
@@ -62,7 +62,7 @@ describe('User Controller Test', () => {
       const response = await request(app.getHttpServer())
         .post('/api/users')
         .send({
-          email: 'test@hafizcaniago.my.id',
+          email: 'log@hafizcaniago.my.id',
           name: 'Hafiz Caniago',
           username: 't.hafigo',
           password: 'secret123',
