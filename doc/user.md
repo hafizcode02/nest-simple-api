@@ -67,6 +67,24 @@ Response Body (Failed) :
 }
 ```
 
+## Verify User
+
+Endpoint : GET /api/users/verify-email/:hash
+
+Response Body (Success) :
+```json
+{
+    "message": "Email Verified Successfully"
+}
+```
+
+Response Body (Failed) :
+```json
+{
+    "errors": "Email already verified"
+}
+```
+
 ## Get User
 
 Endpoint : GET /api/users/current
