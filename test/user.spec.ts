@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
+import request from 'supertest';
 import { AppModule } from './../src/app.module';
 import { Logger } from 'winston';
 import { TestService } from './test.service';
@@ -44,7 +44,7 @@ describe('User Controller Test', () => {
       const response = await request(app.getHttpServer())
         .post('/api/users')
         .send({
-          email: 't.dev@hafizcaniago.my.id',
+          email: 'test@hafizcaniago.my.id',
           name: 'Hafiz Caniago',
           username: 't.hafigo',
           password: 'secret123',
@@ -62,7 +62,7 @@ describe('User Controller Test', () => {
       const response = await request(app.getHttpServer())
         .post('/api/users')
         .send({
-          email: 't.dev@hafizcaniago.my.id',
+          email: 'test@hafizcaniago.my.id',
           name: 'Hafiz Caniago',
           username: 't.hafigo',
           password: 'secret123',
