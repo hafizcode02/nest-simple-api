@@ -218,4 +218,16 @@ export class UserService {
       name: updatedUser.name,
     };
   }
+
+  async logout(user: User): Promise<any> {
+    await this.prismaService.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        token: null,
+        tokenExp: null,
+      },
+    });
+  }
 }

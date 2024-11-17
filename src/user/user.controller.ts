@@ -81,4 +81,14 @@ export class UserController {
       data: result,
     };
   }
+
+  @Post('/logout')
+  @HttpCode(200)
+  @UseRole(Role.ADMIN, Role.USER)
+  async logout(@Auth() user: User): Promise<JsonResponse<any>> {
+    await this.userService.logout(user);
+    return {
+      message: 'Logged out successfully',
+    };
+  }
 }

@@ -158,8 +158,7 @@ Headers:
 Response Body (Success) :
 ```json
 {
-    "message": "User logout successfully",
-    "data": true
+    "message": "User logout successfully"
 }
 ```
 
