@@ -13,3 +13,8 @@ export class UserResponse {
   token?: string;
   emailSent?: boolean;
 }
+
+export class LoginUserRequest {
+  username: string;
+  password: string;
+}

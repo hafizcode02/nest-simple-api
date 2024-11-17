@@ -8,13 +8,19 @@ import {
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { PrismaService } from '../common/prisma.service';
 import { ValidationService } from '../common/validation.service';
-import { RegisterUserRequest, UserResponse } from '../model/user.model';
+import {
+  LoginUserRequest,
+  RegisterUserRequest,
+  UserResponse,
+} from '../model/user.model';
 import { Logger } from 'winston';
 import { UserValidation } from './user.validation';
 import * as bcrypt from 'bcrypt';
 import { MailService } from '../common/mail.service';
 import { Request } from 'express';
 import { HashidService } from '../common/hashid.service';
+import { log } from 'console';
+import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class UserService {
@@ -77,6 +83,7 @@ export class UserService {
   }
 
   async verifyEmail(hash: string): Promise<any> {
+    this.logger.info(`Verifying email with hash of id : ${hash}`);
     const id = this.hashIdService.decode(hash);
 
     if (!id) {
@@ -112,5 +119,62 @@ export class UserService {
     await this.mailService.sendWelcomeEmail(user.name, user.email);
 
     return 'Email Verified Successfully';
+  }
+
+  async login(request: LoginUserRequest): Promise<UserResponse> {
+    log('UserService.login() ', JSON.stringify(request));
+
+    const loginRequest: LoginUserRequest = this.validationService.validate(
+      UserValidation.LOGIN,
+      request,
+    );
+
+    let user = await this.prismaService.user.findUnique({
+      where: {
+        username: loginRequest.username,
+      },
+    });
+
+    if (!user) {
+      throw new HttpException(
+        'username and password is invalid!',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    const isPasswordMatch = await bcrypt.compare(
+      loginRequest.password,
+      user.password,
+    );
+
+    if (!isPasswordMatch) {
+      throw new HttpException(
+        'username and password is invalid!',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    if (!user.isVerified) {
+      throw new HttpException(
+        'Please verify your email before continue!',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    user = await this.prismaService.user.update({
+      where: {
+        username: loginRequest.username,
+      },
+      data: {
+        token: uuid(),
+      },
+    });
+
+    return {
+      email: user.email,
+      username: user.username,
+      name: user.name,
+      token: user.token,
+    };
   }
 }

@@ -1,6 +1,10 @@
 import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
 import { UserService } from './user.service';
-import { RegisterUserRequest, UserResponse } from '../model/user.model';
+import {
+  LoginUserRequest,
+  RegisterUserRequest,
+  UserResponse,
+} from '../model/user.model';
 import { JsonResponse } from '../model/json.model';
 import { Request } from 'express';
 
@@ -24,6 +28,16 @@ export class UserController {
     const result = await this.userService.verifyEmail(hash);
     return {
       message: result,
+    };
+  }
+
+  @Post('/login')
+  async login(
+    @Body() request: LoginUserRequest,
+  ): Promise<JsonResponse<UserResponse>> {
+    const result = await this.userService.login(request);
+    return {
+      data: result,
     };
   }
 }
