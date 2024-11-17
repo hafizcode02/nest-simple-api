@@ -163,29 +163,4 @@ Response Body (Success) :
 }
 ```
 
-## Verify Email User (Optional)
-Endpoint : GET /api/users/activate?email=
-
-Query Params :
-- email: string (hash), required.
-
-Response Body (Success) :
-```json
-{
-    "message": "User Activated Succesfully",
-    "data": {
-        "email": "dev@hafizcaniago.my.id",
-        "name": "Hafiz Caniago",
-        "username": "hafigo",
-    }
-}
-```
-
-Response Body (Failed) :
-```json
-{
-    "errors": "Email not Found!"
-}
-```
-
 ## Forgot Password (Optional)
