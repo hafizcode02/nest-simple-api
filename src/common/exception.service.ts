@@ -6,7 +6,13 @@ import {
 } from '@nestjs/common';
 import { ZodError } from 'zod';
 
-@Catch(ZodError, HttpException)
+export class MailServiceException extends HttpException {
+  constructor(message: string) {
+    super(message, 500);
+  }
+}
+
+@Catch(ZodError, HttpException, MailServiceException)
 export class ExceptionService implements ExceptionFilter {
   catch(exception: any, host: ArgumentsHost) {
     const response = host.switchToHttp().getResponse();
@@ -22,6 +28,10 @@ export class ExceptionService implements ExceptionFilter {
           field: error.path.join('.'),
           message: error.message,
         })),
+      });
+    } else if (exception instanceof MailServiceException) {
+      response.status(500).json({
+        errors: exception.message,
       });
     } else {
       response.status(500).json({
