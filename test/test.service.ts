@@ -42,4 +42,14 @@ export class TestService {
 
     return updatedTokenExpiration;
   }
+
+  async getUser() {
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        username: 't.hafigo',
+      },
+    });
+
+    return user;
+  }
 }

@@ -307,6 +307,10 @@ describe('User Controller Test', () => {
 
       expect(response.status).toBe(200);
       expect(response.body.message).toBe('Logged out successfully');
+
+      const checkUserTokenIsDeleted = await testService.getUser();
+      expect(checkUserTokenIsDeleted.token).toBeNull();
+      expect(checkUserTokenIsDeleted.tokenExp).toBeNull();
     });
   });
 });
