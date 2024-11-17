@@ -58,6 +58,7 @@ describe('User Controller Test', () => {
 
       expect(response.status).toBe(201);
       expect(response.body.data.email).toBe('log@hafizcaniago.my.id');
+      expect(response.body.data.emailSent).toBe(true);
     });
 
     it('should be return 400 when username or email is already taken', async () => {
