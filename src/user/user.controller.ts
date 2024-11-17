@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Param,
+  Post,
+  Req,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import {
   LoginUserRequest,
@@ -13,6 +21,7 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @Post()
+  @HttpCode(201)
   async register(
     @Req() expressReq: Request,
     @Body() request: RegisterUserRequest,
@@ -32,6 +41,7 @@ export class UserController {
   }
 
   @Post('/login')
+  @HttpCode(200)
   async login(
     @Body() request: LoginUserRequest,
   ): Promise<JsonResponse<UserResponse>> {

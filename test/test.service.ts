@@ -14,13 +14,14 @@ export class TestService {
     });
   }
 
-  async createUser() {
+  async createUser(isVerified: boolean = false) {
     const createdUser = await this.prismaService.user.create({
       data: {
         email: 'log@hafizcaniago.my.id',
         name: 'Hafiz Caniago',
         username: 't.hafigo',
         password: await bcrypt.hash('secret123', 10),
+        isVerified: isVerified,
       },
     });
 

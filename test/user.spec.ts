@@ -43,7 +43,7 @@ describe('User Controller Test', () => {
       expect(response.body.errors).toBeDefined();
     });
 
-    it('should be return 201 when request is valid', async () => {
+    it('should be return 201 when request is valid and success register', async () => {
       const response = await request(app.getHttpServer())
         .post('/api/users')
         .send({
@@ -89,6 +89,59 @@ describe('User Controller Test', () => {
 
       expect(response.status).toBe(200);
       expect(response.body.message).toBe('Email Verified Successfully');
+    });
+  });
+
+  describe('POST /api/users/login', () => {
+    beforeEach(async () => {
+      await testService.deleteUser();
+      await testService.createUser(true);
+    });
+
+    it('should be return 400 when request is invalid', async () => {
+      const response = await request(app.getHttpServer())
+        .post('/api/users/login')
+        .send({ username: 'test' });
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(400);
+      expect(response.body.errors).toBeDefined();
+    });
+
+    it('should be return 401 if account is not verified', async () => {
+      await testService.deleteUser();
+      await testService.createUser(false);
+
+      const response = await request(app.getHttpServer())
+        .post('/api/users/login')
+        .send({
+          username: 't.hafigo',
+          password: 'secret123',
+        });
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(401);
+      expect(response.body.errors).toBeDefined();
+    });
+
+    it('should be return 200 when request is valid', async () => {
+      const response = await request(app.getHttpServer())
+        .post('/api/users/login')
+        .send({
+          username: 't.hafigo',
+          password: 'secret123',
+        });
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(200);
+      expect(response.body.data.email).toBe('log@hafizcaniago.my.id');
+      expect(response.body.data.username).toBe('t.hafigo');
+      expect(response.body.data.name).toBe('Hafiz Caniago');
+      expect(response.body.data.token).toBeDefined();
+      expect(response.body.data.emailSent).toBeUndefined();
     });
   });
 });
