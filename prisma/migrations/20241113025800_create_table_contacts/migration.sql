@@ -2,7 +2,7 @@
 CREATE TABLE `contacts` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `first_name` VARCHAR(100) NOT NULL,
-    `last_name` VARCHAR(100) NOT NULL,
+    `last_name` VARCHAR(100) NULL,
     `email` VARCHAR(100) NOT NULL,
     `phone` TEXT NOT NULL,
     `social_linkedin` VARCHAR(100) NULL,
