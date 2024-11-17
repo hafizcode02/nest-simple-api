@@ -15,6 +15,10 @@ import {
 } from '../model/user.model';
 import { JsonResponse } from '../model/json.model';
 import { Request } from 'express';
+import { UseRole } from '../common/auth/role.decorator';
+import { User } from '@prisma/client';
+import { Role } from '../common/auth/role.enum';
+import { Auth } from 'src/common/auth/auth.decorator';
 
 @Controller('/api/users')
 export class UserController {
@@ -46,6 +50,18 @@ export class UserController {
     @Body() request: LoginUserRequest,
   ): Promise<JsonResponse<UserResponse>> {
     const result = await this.userService.login(request);
+    return {
+      data: result,
+    };
+  }
+
+  @Get('/current')
+  @HttpCode(200)
+  @UseRole(Role.ADMIN, Role.USER)
+  async getLoggedInUser(
+    @Auth() user: User,
+  ): Promise<JsonResponse<UserResponse>> {
+    const result = await this.userService.getLoggedInUser(user);
     return {
       data: result,
     };

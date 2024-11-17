@@ -21,6 +21,7 @@ import { Request } from 'express';
 import { HashidService } from '../common/hashid.service';
 import { log } from 'console';
 import { v4 as uuid } from 'uuid';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class UserService {
@@ -175,6 +176,14 @@ export class UserService {
       username: user.username,
       name: user.name,
       token: user.token,
+    };
+  }
+
+  async getLoggedInUser(user: User): Promise<UserResponse> {
+    return {
+      email: user.email,
+      username: user.username,
+      name: user.name,
     };
   }
 }
