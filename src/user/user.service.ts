@@ -72,6 +72,7 @@ export class UserService {
       email: user.email,
       username: user.username,
       name: user.name,
+      emailSent: true,
     };
   }
 
@@ -107,6 +108,8 @@ export class UserService {
         isVerified: true,
       },
     });
+
+    await this.mailService.sendWelcomeEmail(user.name, user.email);
 
     return 'Email Verified Successfully';
   }

@@ -3,6 +3,7 @@ import * as nodemailer from 'nodemailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import { MailSubjectList, MailTemplate } from './mail.template';
 import { ConfigService } from '@nestjs/config';
+import { MailServiceException } from './exception.service';
 
 @Injectable()
 export class MailService {
@@ -25,7 +26,8 @@ export class MailService {
     const subject = MailSubjectList.WELCOME;
     const html = MailTemplate.welcomeEmail(name);
 
-    await this.sendMail(recipientEmail, subject, html);
+    const info = await this.sendMail(recipientEmail, subject, html);
+    return info.messageId;
   }
 
   async sendVerificationEmail(
@@ -36,7 +38,8 @@ export class MailService {
     const subject = MailSubjectList.VERIFY;
     const html = MailTemplate.verifyEmail(name, verifyEmailLink);
 
-    await this.sendMail(recipientEmail, subject, html);
+    const info = await this.sendMail(recipientEmail, subject, html);
+    return info.messageId;
   }
 
   private async sendMail(to: string, subject: string, html?: string) {
@@ -54,7 +57,7 @@ export class MailService {
       return info;
     } catch (error) {
       this.logger.error(`Failed to send email: ${error.message}`, error.stack);
-      throw new Error(`Failed to send email: ${error.message}`);
+      throw new MailServiceException(`Failed to send email: ${error.message}`);
     }
   }
 }
