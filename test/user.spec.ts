@@ -6,11 +6,13 @@ import { Logger } from 'winston';
 import { TestService } from './test.service';
 import { TestModule } from './test.module';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { HashidService } from '../src/common/hashid.service';
 
 describe('User Controller Test', () => {
   let app: INestApplication;
   let logger: Logger;
   let testService: TestService;
+  let hashIdService: HashidService;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -21,6 +23,7 @@ describe('User Controller Test', () => {
 
     logger = app.get(WINSTON_MODULE_PROVIDER);
     testService = app.get(TestService);
+    hashIdService = app.get(HashidService);
     await app.init();
   });
 
@@ -54,7 +57,7 @@ describe('User Controller Test', () => {
       logger.info(response.body);
 
       expect(response.status).toBe(201);
-      expect(response.body.data.email).toBe('t.dev@hafizcaniago.my.id');
+      expect(response.body.data.email).toBe('log@hafizcaniago.my.id');
     });
 
     it('should be return 400 when username or email is already taken', async () => {
@@ -73,6 +76,18 @@ describe('User Controller Test', () => {
 
       expect(response.status).toBe(400);
       expect(response.body.errors).toBeDefined();
+    });
+
+    it('should be return 200 and can verify email users', async () => {
+      const user = await testService.createUser();
+      const response = await request(app.getHttpServer()).get(
+        `/api/users/verify-email/${hashIdService.encode(user.id)}`,
+      );
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(200);
+      expect(response.body.message).toBe('Email Verified Successfully');
     });
   });
 });

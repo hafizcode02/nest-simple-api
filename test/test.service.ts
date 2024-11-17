@@ -14,7 +14,7 @@ export class TestService {
   }
 
   async createUser() {
-    await this.prismaService.user.create({
+    const createdUser = await this.prismaService.user.create({
       data: {
         email: 'log@hafizcaniago.my.id',
         name: 'Hafiz Caniago',
@@ -22,5 +22,7 @@ export class TestService {
         password: 'secret123',
       },
     });
+
+    return createdUser;
   }
 }
