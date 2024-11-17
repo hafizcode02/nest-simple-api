@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { CommonModule } from './common/common.module';
 import { UserModule } from './user/user.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { ContactModule } from './contact/contact.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
     }),
     CommonModule,
     UserModule,
+    ContactModule,
   ],
   controllers: [],
   providers: [
