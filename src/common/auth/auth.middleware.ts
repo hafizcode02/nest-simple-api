@@ -1,4 +1,4 @@
-import { Injectable, NestMiddleware } from '@nestjs/common';
+import { HttpException, Injectable, NestMiddleware } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 
 @Injectable()
@@ -17,6 +17,10 @@ export class AuthMiddleware implements NestMiddleware {
     return authHeader;
   }
 
+  private isTokenExp(tokenExp: Date): boolean {
+    return tokenExp > new Date();
+  }
+
   async use(req: any, res: any, next: (error?: Error | any) => void) {
     const token = req.headers['authorization'] as string;
     if (token) {
@@ -30,11 +34,16 @@ export class AuthMiddleware implements NestMiddleware {
           email: true,
           name: true,
           role: true,
+          tokenExp: true,
         },
       });
 
       if (user) {
         req.user = user;
+      }
+
+      if (!this.isTokenExp(user.tokenExp)) {
+        throw new HttpException('Token expired', 401);
       }
     }
 

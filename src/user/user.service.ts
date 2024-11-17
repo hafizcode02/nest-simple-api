@@ -168,6 +168,7 @@ export class UserService {
       },
       data: {
         token: uuid(),
+        tokenExp: new Date(new Date().getTime() + 60 * 60 * 1000),
       },
     });
 

@@ -26,6 +26,7 @@ model User {
   email      String    @unique @db.VarChar(100)
   role       Role      @default(User)
   token      String?   @db.VarChar(150)
+  tokenExp   DateTime? @db.DateTime
   isActive   Boolean   @default(true)
   isVerified Boolean   @default(false)
   createdAt  DateTime  @default(now())
