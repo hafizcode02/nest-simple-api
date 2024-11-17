@@ -278,4 +278,35 @@ describe('User Controller Test', () => {
       expect(loginResponse.body.data.token).toBeDefined();
     });
   });
+
+  describe('POST /api/users/logout', () => {
+    beforeEach(async () => {
+      await testService.deleteUser();
+      await testService.createUser(true);
+    });
+
+    it('should be return 401 when token is invalid', async () => {
+      const response = await request(app.getHttpServer())
+        .post('/api/users/logout')
+        .set('Authorization', 'thisisinvalidtoken');
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(401);
+      expect(response.body.errors).toBeDefined();
+    });
+
+    it('should be return 200 when token is valid', async () => {
+      await testService.deleteUser();
+      const user = await testService.createUser(true);
+      const response = await request(app.getHttpServer())
+        .post('/api/users/logout')
+        .set('Authorization', user.token);
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(200);
+      expect(response.body.message).toBe('Logged out successfully');
+    });
+  });
 });
