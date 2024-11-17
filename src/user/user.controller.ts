@@ -4,6 +4,7 @@ import {
   Get,
   HttpCode,
   Param,
+  Patch,
   Post,
   Req,
 } from '@nestjs/common';
@@ -11,6 +12,7 @@ import { UserService } from './user.service';
 import {
   LoginUserRequest,
   RegisterUserRequest,
+  UpdateUserRequest,
   UserResponse,
 } from '../model/user.model';
 import { JsonResponse } from '../model/json.model';
@@ -62,6 +64,19 @@ export class UserController {
     @Auth() user: User,
   ): Promise<JsonResponse<UserResponse>> {
     const result = await this.userService.getLoggedInUser(user);
+    return {
+      data: result,
+    };
+  }
+
+  @Patch('/current')
+  @HttpCode(200)
+  @UseRole(Role.ADMIN, Role.USER)
+  async updateUser(
+    @Auth() user: User,
+    @Body() request: UpdateUserRequest,
+  ): Promise<JsonResponse<UserResponse>> {
+    const result = await this.userService.update(user, request);
     return {
       data: result,
     };

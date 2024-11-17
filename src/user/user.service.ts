@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   HttpException,
   HttpStatus,
@@ -11,6 +12,7 @@ import { ValidationService } from '../common/validation.service';
 import {
   LoginUserRequest,
   RegisterUserRequest,
+  UpdateUserRequest,
   UserResponse,
 } from '../model/user.model';
 import { Logger } from 'winston';
@@ -37,7 +39,7 @@ export class UserService {
     @Req() expressReq: Request,
     request: RegisterUserRequest,
   ): Promise<UserResponse> {
-    this.logger.info(`Registering user ${JSON.stringify(request)}`);
+    this.logger.debug(`Registering user ${JSON.stringify(request)}`);
 
     const registerRequest: RegisterUserRequest =
       this.validationService.validate(UserValidation.REGISTER, request);
@@ -60,7 +62,6 @@ export class UserService {
 
     registerRequest.password = await bcrypt.hash(registerRequest.password, 10);
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { confirmPassword, ...userData } = registerRequest;
 
     const user = await this.prismaService.user.create({
@@ -84,7 +85,7 @@ export class UserService {
   }
 
   async verifyEmail(hash: string): Promise<any> {
-    this.logger.info(`Verifying email with hash of id : ${hash}`);
+    this.logger.debug(`Verifying email with hash of id : ${hash}`);
     const id = this.hashIdService.decode(hash);
 
     if (!id) {
@@ -123,7 +124,7 @@ export class UserService {
   }
 
   async login(request: LoginUserRequest): Promise<UserResponse> {
-    log('UserService.login() ', JSON.stringify(request));
+    this.logger.debug('UserService.login() ', JSON.stringify(request));
 
     const loginRequest: LoginUserRequest = this.validationService.validate(
       UserValidation.LOGIN,
@@ -185,6 +186,36 @@ export class UserService {
       email: user.email,
       username: user.username,
       name: user.name,
+    };
+  }
+
+  async update(user: User, request: UpdateUserRequest): Promise<UserResponse> {
+    this.logger.debug(
+      `UserService.update() : ${JSON.stringify(user)}`,
+      JSON.stringify(request),
+    );
+    const updateRequest: UpdateUserRequest = this.validationService.validate(
+      UserValidation.UPDATE,
+      request,
+    );
+
+    if (updateRequest.password) {
+      updateRequest.password = await bcrypt.hash(updateRequest.password, 10);
+    }
+
+    const { confirmPassword, ...userData } = updateRequest;
+
+    const updatedUser = await this.prismaService.user.update({
+      where: {
+        id: user.id,
+      },
+      data: userData,
+    });
+
+    return {
+      email: updatedUser.email,
+      username: updatedUser.username,
+      name: updatedUser.name,
     };
   }
 }

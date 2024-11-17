@@ -192,4 +192,90 @@ describe('User Controller Test', () => {
       expect(response.body.errors).toBe('Unauthorized');
     });
   });
+
+  describe('PATCH /api/users/current', () => {
+    beforeEach(async () => {
+      await testService.deleteUser();
+      await testService.createUser(true);
+    });
+
+    it('should be return 401 when token is invalid', async () => {
+      const response = await request(app.getHttpServer())
+        .patch('/api/users/current')
+        .set('Authorization', 'thisisinvalidtoken');
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(401);
+      expect(response.body.errors).toBeDefined();
+    });
+
+    it('should be return 400 when request is invalid', async () => {
+      await testService.deleteUser();
+      const user = await testService.createUser(true);
+      const response = await request(app.getHttpServer())
+        .patch('/api/users/current')
+        .set('Authorization', user.token)
+        .send({ name: 'Hafigo', password: '' });
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(400);
+      expect(response.body.errors).toBeDefined();
+    });
+
+    it('should be return 200 when request is valid', async () => {
+      await testService.deleteUser();
+      const user = await testService.createUser(true);
+      const response = await request(app.getHttpServer())
+        .patch('/api/users/current')
+        .set('Authorization', user.token)
+        .send({ name: 'Hafigo' });
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(200);
+      expect(response.body.data.email).toBe('log@hafizcaniago.my.id');
+      expect(response.body.data.name).toBe('Hafigo');
+    });
+
+    it('should be return 400 when password and confirmPassword is not match', async () => {
+      await testService.deleteUser();
+      const user = await testService.createUser(true);
+      const response = await request(app.getHttpServer())
+        .patch('/api/users/current')
+        .set('Authorization', user.token)
+        .send({ password: 'pass125', confirmPassword: 'pass123456' });
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(400);
+      expect(response.body.errors).toBeDefined();
+    });
+
+    it('should be change password (return 200) and login again and return success', async () => {
+      await testService.deleteUser();
+      const user = await testService.createUser(true);
+      const response = await request(app.getHttpServer())
+        .patch('/api/users/current')
+        .set('Authorization', user.token)
+        .send({ password: 'pass12345', confirmPassword: 'pass12345' });
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(200);
+
+      const loginResponse = await request(app.getHttpServer())
+        .post('/api/users/login')
+        .send({
+          username: 't.hafigo',
+          password: 'pass12345',
+        });
+
+      logger.info(loginResponse.body);
+
+      expect(loginResponse.status).toBe(200);
+      expect(loginResponse.body.data.token).toBeDefined();
+    });
+  });
 });

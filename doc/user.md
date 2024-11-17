@@ -113,7 +113,7 @@ Response Body (Failed) :
 
 ## Update User
 
-Endpoint : PATCH /api/users/
+Endpoint : PATCH /api/users/current
 
 Headers:
 - authorization: token
