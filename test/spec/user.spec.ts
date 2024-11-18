@@ -1,12 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
-import { AppModule } from './../src/app.module';
+import { AppModule } from './../../src/app.module';
 import { Logger } from 'winston';
-import { TestService } from './test.service';
-import { TestModule } from './test.module';
+import { TestService } from './../test.service';
+import { TestModule } from './../test.module';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { HashidService } from '../src/common/hashid.service';
+import { HashidService } from './../../src/common/hashid.service';
 
 describe('User Controller Test', () => {
   let app: INestApplication;
@@ -312,5 +312,9 @@ describe('User Controller Test', () => {
       expect(checkUserTokenIsDeleted.token).toBeNull();
       expect(checkUserTokenIsDeleted.tokenExp).toBeNull();
     });
+  });
+
+  afterAll(async () => {
+    await testService.deleteUser();
   });
 });
