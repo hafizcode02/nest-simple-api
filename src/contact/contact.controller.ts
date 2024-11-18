@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   Param,
@@ -67,6 +68,21 @@ export class ContactController {
 
     return {
       data: result,
+    };
+  }
+
+  @Delete('/:contactId')
+  @HttpCode(200)
+  @UseRole(Role.USER)
+  async deleteContact(
+    @Auth() user: User,
+    @Param('contactId', ParseIntPipe) contactId: number,
+  ): Promise<JsonResponse<ContactResponse>> {
+    await this.contactService.deleteContact(user, contactId);
+
+    return {
+      message: 'Contact Successfully Deleted',
+      data: null,
     };
   }
 }

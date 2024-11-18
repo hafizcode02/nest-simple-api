@@ -99,4 +99,23 @@ export class ContactService {
 
     return this.toContactResponse(updatedContact);
   }
+
+  async deleteContact(user: User, contactId: number): Promise<void> {
+    const contact = await this.prismaService.contact.findFirst({
+      where: {
+        id: contactId,
+        userId: user.id,
+      },
+    });
+
+    if (!contact) {
+      throw new HttpException('Contact not found', HttpStatus.NOT_FOUND);
+    }
+
+    await this.prismaService.contact.delete({
+      where: {
+        id: contactId,
+      },
+    });
+  }
 }
