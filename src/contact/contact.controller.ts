@@ -4,10 +4,14 @@ import {
   Delete,
   Get,
   HttpCode,
+  HttpException,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Patch,
   Post,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ContactService } from './contact.service';
 import { UseRole } from '../common/auth/role.decorator';
@@ -20,10 +24,15 @@ import {
 } from '../model/contact.model';
 import { Auth } from '../common/auth/auth.decorator';
 import { User } from '@prisma/client';
+import { MulterService } from 'src/common/multer.service';
+import { MulterInterceptor } from 'src/common/multer.interceptor';
 
 @Controller('/api/contacts')
 export class ContactController {
-  constructor(private contactService: ContactService) {}
+  constructor(
+    private contactService: ContactService,
+    private multerService: MulterService,
+  ) {}
 
   @Post()
   @HttpCode(201)
@@ -83,6 +92,30 @@ export class ContactController {
     return {
       message: 'Contact Successfully Deleted',
       data: null,
+    };
+  }
+
+  @Post('/test-upload')
+  @HttpCode(201)
+  @UseInterceptors(
+    MulterInterceptor.create({
+      fieldName: 'file',
+      fileTypes: ['image/jpeg', 'image/png'],
+      maxSize: 1024 * 1024 * 5,
+    }),
+  )
+  async testUpload(
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<JsonResponse<any>> {
+    if (!file) {
+      throw new HttpException('No file provided!', HttpStatus.BAD_REQUEST);
+    }
+    const filePath = this.multerService.saveFile(file);
+    return {
+      message: 'File uploaded successfully',
+      data: {
+        filePath: filePath,
+      },
     };
   }
 }
