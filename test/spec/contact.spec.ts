@@ -29,6 +29,23 @@ describe('User Controller Test', () => {
       await testService.deleteUser();
     });
 
+    it('should return 400 if request is invalid', async () => {
+      const user = await testService.createUser(true);
+
+      const token = user.token;
+      const contactResponse = await request(app.getHttpServer())
+        .post('/api/contacts')
+        .set('Authorization', token)
+        .send({
+          first_name: '',
+          last_name: '',
+          email: '',
+        });
+
+      expect(contactResponse.status).toBe(400);
+      expect(contactResponse.body.errors).toBeDefined();
+    });
+
     it('should create a new contact', async () => {
       const user = await testService.createUser(true);
 
