@@ -1,5 +1,5 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { User } from '@prisma/client';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { Contact, User } from '@prisma/client';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { PrismaService } from '../common/prisma.service';
 import { ValidationService } from '../common/validation.service';
@@ -14,6 +14,22 @@ export class ContactService {
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
     private validationService: ValidationService,
   ) {}
+
+  private toContactResponse(contact: Contact): ContactResponse {
+    return {
+      id: contact.id,
+      first_name: contact.first_name,
+      last_name: contact.last_name,
+      email: contact.email,
+      phone: contact.phone,
+      social_linkedin: contact.social_linkedin,
+      social_fb: contact.social_fb,
+      social_x: contact.social_x,
+      social_yt: contact.social_yt,
+      social_ig: contact.social_ig,
+      social_github: contact.social_github,
+    };
+  }
 
   async create(
     user: User,
@@ -31,18 +47,21 @@ export class ContactService {
       },
     });
 
-    return {
-      id: result.id,
-      first_name: result.first_name,
-      last_name: result.last_name,
-      email: result.email,
-      phone: result.phone,
-      social_linkedin: result.social_linkedin,
-      social_fb: result.social_fb,
-      social_x: result.social_x,
-      social_yt: result.social_yt,
-      social_ig: result.social_ig,
-      social_github: result.social_github,
-    };
+    return this.toContactResponse(result);
+  }
+
+  async getContact(user: User, contactId: number): Promise<ContactResponse> {
+    const contact = await this.prismaService.contact.findFirst({
+      where: {
+        id: contactId,
+        userId: user.id,
+      },
+    });
+
+    if (!contact) {
+      throw new HttpException('Contact not found', HttpStatus.NOT_FOUND);
+    }
+
+    return this.toContactResponse(contact);
   }
 }
