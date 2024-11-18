@@ -74,6 +74,40 @@ describe('User Controller Test', () => {
     });
   });
 
+  describe('GET /api/contacts/:contactId', () => {
+    beforeEach(async () => {
+      await testService.deleteContact();
+      await testService.deleteUser();
+    });
+
+    it('should return 404 if contact not found', async () => {
+      const user = await testService.createUser(true);
+
+      const token = user.token;
+      const contactResponse = await request(app.getHttpServer())
+        .get('/api/contacts/1')
+        .set('Authorization', token);
+
+      expect(contactResponse.status).toBe(404);
+      expect(contactResponse.body.errors).toBeDefined();
+    });
+
+    it('should return a contact', async () => {
+      const user = await testService.createUser(true);
+      const contact = await testService.createContact(user.id);
+
+      const token = user.token;
+      const contactResponse = await request(app.getHttpServer())
+        .get(`/api/contacts/${contact.id}`)
+        .set('Authorization', token);
+
+      logger.info(contactResponse.body);
+
+      expect(contactResponse.status).toBe(200);
+      expect(contactResponse.body.data.id).toBe(contact.id);
+    });
+  });
+
   afterAll(async () => {
     await testService.deleteContact();
     await testService.deleteUser();
