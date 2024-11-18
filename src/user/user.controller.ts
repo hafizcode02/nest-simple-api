@@ -85,10 +85,11 @@ export class UserController {
   @Post('/logout')
   @HttpCode(200)
   @UseRole(Role.ADMIN, Role.USER)
-  async logout(@Auth() user: User): Promise<JsonResponse<any>> {
+  async logout(@Auth() user: User): Promise<JsonResponse<UserResponse>> {
     await this.userService.logout(user);
     return {
       message: 'Logged out successfully',
+      data: null,
     };
   }
 }
