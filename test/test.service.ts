@@ -52,4 +52,32 @@ export class TestService {
 
     return user;
   }
+
+  async createContact(id: number) {
+    const contact = await this.prismaService.contact.create({
+      data: {
+        first_name: 'Test',
+        last_name: '',
+        email: 'log@hafizcaniago.my.id',
+        phone: '628712312312',
+        social_linkedin: '',
+        social_fb: '',
+        social_x: '',
+        social_yt: '',
+        social_ig: '',
+        social_github: '',
+        userId: id,
+      },
+    });
+
+    return contact;
+  }
+
+  async deleteContact() {
+    await this.prismaService.contact.deleteMany({
+      where: {
+        first_name: 'Test',
+      },
+    });
+  }
 }
