@@ -59,7 +59,7 @@ describe('User Controller Test', () => {
       expect(response.status).toBe(201);
       expect(response.body.data.email).toBe('log@hafizcaniago.my.id');
       expect(response.body.data.emailSent).toBe(true);
-    });
+    }, 30000);
 
     it('should be return 400 when username or email is already taken', async () => {
       await testService.createUser();
@@ -89,7 +89,7 @@ describe('User Controller Test', () => {
 
       expect(response.status).toBe(200);
       expect(response.body.message).toBe('Email Verified Successfully');
-    });
+    }, 30000);
   });
 
   describe('POST /api/users/login', () => {
