@@ -108,6 +108,62 @@ describe('User Controller Test', () => {
     });
   });
 
+  describe('PATCH /api/contacts/:contactId', () => {
+    beforeEach(async () => {
+      await testService.deleteContact();
+      await testService.deleteUser();
+    });
+
+    it('should return 404 if contact not found', async () => {
+      const user = await testService.createUser(true);
+
+      const token = user.token;
+      const contactResponse = await request(app.getHttpServer())
+        .patch('/api/contacts/99')
+        .set('Authorization', token)
+        .send({
+          first_name: 'Test',
+        });
+
+      expect(contactResponse.status).toBe(404);
+      expect(contactResponse.body.errors).toBeDefined();
+    });
+
+    it('should return 400 if request is invalid', async () => {
+      const user = await testService.createUser(true);
+      const contact = await testService.createContact(user.id);
+
+      const token = user.token;
+      const contactResponse = await request(app.getHttpServer())
+        .patch(`/api/contacts/${contact.id}`)
+        .set('Authorization', token)
+        .send({
+          first_name: '',
+        });
+
+      expect(contactResponse.status).toBe(400);
+      expect(contactResponse.body.errors).toBeDefined();
+    });
+
+    it('should update a contact', async () => {
+      const user = await testService.createUser(true);
+      const contact = await testService.createContact(user.id);
+
+      const token = user.token;
+      const contactResponse = await request(app.getHttpServer())
+        .patch(`/api/contacts/${contact.id}`)
+        .set('Authorization', token)
+        .send({
+          first_name: 'Test',
+        });
+
+      logger.info(contactResponse.body);
+
+      expect(contactResponse.status).toBe(200);
+      expect(contactResponse.body.data.first_name).toBe('Test');
+    });
+  });
+
   afterAll(async () => {
     await testService.deleteContact();
     await testService.deleteUser();
