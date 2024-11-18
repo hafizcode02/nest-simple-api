@@ -9,6 +9,7 @@ import { ExceptionService } from './exception.service';
 import { MailService } from './mail.service';
 import { HashidService } from './hashid.service';
 import { AuthMiddleware } from './auth/auth.middleware';
+import { MulterService } from './multer.service';
 
 @Global()
 @Module({
@@ -41,8 +42,15 @@ import { AuthMiddleware } from './auth/auth.middleware';
     },
     MailService,
     HashidService,
+    MulterService,
   ],
-  exports: [PrismaService, ValidationService, MailService, HashidService],
+  exports: [
+    PrismaService,
+    ValidationService,
+    MailService,
+    HashidService,
+    MulterService,
+  ],
 })
 export class CommonModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
