@@ -6,7 +6,7 @@ export class MulterService {
   constructor() {}
 
   saveFile(file: Express.Multer.File): string {
-    const uploadPath = join(__dirname, '../../uploads', file.filename);
-    return uploadPath;
+    join(__dirname, '../../uploads', file.filename);
+    return file.filename;
   }
 }
