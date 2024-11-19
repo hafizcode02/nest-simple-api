@@ -45,8 +45,8 @@ export class ContactController {
     @Query('name') name?: string,
     @Query('email') email?: string,
     @Query('phone') phone?: string,
-    @Query('page') page?: number,
-    @Query('size') size?: number,
+    @Query('page', new ParseIntPipe({ optional: true })) page?: number,
+    @Query('size', new ParseIntPipe({ optional: true })) size?: number,
   ): Promise<JsonResponse<ContactResponse[]>> {
     const result = await this.contactService.searchContact(user, {
       name: name,
