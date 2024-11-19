@@ -233,6 +233,44 @@ describe('User Controller Test', () => {
     });
   });
 
+  describe('GET /api/contacts/', () => {
+    beforeEach(async () => {
+      await testService.deleteContact();
+      await testService.deleteUser();
+    });
+
+    it('should return a list of contacts', async () => {
+      const user = await testService.createUser(true);
+      await testService.createContact(user.id);
+
+      const token = user.token;
+      const contactResponse = await request(app.getHttpServer())
+        .get('/api/contacts')
+        .set('Authorization', token);
+
+      logger.info(contactResponse.body);
+
+      expect(contactResponse.status).toBe(200);
+      expect(contactResponse.body.data).toBeDefined();
+    });
+
+    it('should return a list of contacts with search', async () => {
+      const user = await testService.createUser(true);
+      await testService.createContact(user.id);
+
+      const token = user.token;
+      const contactResponse = await request(app.getHttpServer())
+        .get('/api/contacts')
+        .query({ name: 'Test' })
+        .set('Authorization', token);
+
+      logger.info(contactResponse.body);
+
+      expect(contactResponse.status).toBe(200);
+      expect(contactResponse.body.data).toBeDefined();
+    });
+  });
+
   afterAll(async () => {
     await testService.deleteContact();
     await testService.deleteUser();
