@@ -7,9 +7,11 @@ import {
   CreateContactRequest,
   ContactResponse,
   UpdateContactRequest,
+  ImageContactResponse,
 } from '../model/contact.model';
 import { Logger } from 'winston';
 import { ContactValidation } from './contact.validation';
+import { Request } from 'express';
 
 @Injectable()
 export class ContactService {
@@ -32,6 +34,7 @@ export class ContactService {
       social_yt: contact.social_yt,
       social_ig: contact.social_ig,
       social_github: contact.social_github,
+      photo: contact.photo,
     };
   }
 
@@ -117,5 +120,42 @@ export class ContactService {
         id: contactId,
       },
     });
+  }
+
+  async uploadImage(
+    user: User,
+    req: Request,
+    contactId: number,
+    filename: string,
+  ): Promise<ImageContactResponse> {
+    console.log('filename', filename);
+    console.log('contactId', contactId);
+    console.log('user', user);
+    const contact = await this.prismaService.contact.findFirst({
+      where: {
+        id: contactId,
+        userId: user.id,
+      },
+    });
+
+    if (!contact) {
+      throw new HttpException('Contact not found', HttpStatus.NOT_FOUND);
+    }
+
+    const result = await this.prismaService.contact.update({
+      where: {
+        id: contactId,
+      },
+      data: {
+        photo: `${req.protocol}://${req.get('host')}/uploads/${filename}`,
+      },
+    });
+
+    return {
+      id: result.id,
+      first_name: result.first_name,
+      email: result.email,
+      filename: result.photo,
+    };
   }
 }

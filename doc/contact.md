@@ -208,8 +208,13 @@ Request Body (Form-Data) :
 Response Body (Success) : 
 ```json
 {
-    "message": "Contact Image Succesfully Uploaded!",
-    "data": true,
+    "message": "File uploaded successfully",
+    "data": {
+        "id": 9,
+        "first_name": "Bjir",
+        "email": "dev@hafizcaniago.my.id",
+        "filename": "http://localhost:3000/uploads/2024-11-19T02-24-15-468Z.jpg"
+    }
 }
 ```
 

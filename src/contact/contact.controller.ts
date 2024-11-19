@@ -10,6 +10,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Req,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -24,8 +25,9 @@ import {
 } from '../model/contact.model';
 import { Auth } from '../common/auth/auth.decorator';
 import { User } from '@prisma/client';
-import { MulterService } from 'src/common/multer.service';
-import { MulterInterceptor } from 'src/common/multer.interceptor';
+import { MulterService } from '../common/multer.service';
+import { MulterInterceptor } from '../common/multer.interceptor';
+import { Request } from 'express';
 
 @Controller('/api/contacts')
 export class ContactController {
@@ -95,27 +97,35 @@ export class ContactController {
     };
   }
 
-  @Post('/test-upload')
+  @Post('/:contactId/upload')
   @HttpCode(201)
+  @UseRole(Role.USER)
   @UseInterceptors(
     MulterInterceptor.create({
       fieldName: 'file',
-      fileTypes: ['image/jpeg', 'image/png'],
-      maxSize: 1024 * 1024 * 5,
+      fileTypes: ['image/jpeg', 'image/png', 'image/jpg'],
+      maxSize: 1024 * 1024 * 5, // 5MB
     }),
   )
-  async testUpload(
+  async uploadContactImage(
+    @Auth() user: User,
     @UploadedFile() file: Express.Multer.File,
+    @Param('contactId', ParseIntPipe) contactId: number,
+    @Req() req: Request,
   ): Promise<JsonResponse<any>> {
     if (!file) {
       throw new HttpException('No file provided!', HttpStatus.BAD_REQUEST);
     }
-    const filePath = this.multerService.saveFile(file);
+    const upload = this.multerService.saveFile(file);
+    const result = await this.contactService.uploadImage(
+      user,
+      req,
+      contactId,
+      upload,
+    );
     return {
       message: 'File uploaded successfully',
-      data: {
-        filePath: filePath,
-      },
+      data: result,
     };
   }
 }

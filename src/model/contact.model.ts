@@ -10,6 +10,7 @@ export class ContactResponse {
   social_yt?: string;
   social_ig?: string;
   social_github?: string;
+  photo?: string;
 }
 
 export class CreateContactRequest {
@@ -36,4 +37,11 @@ export class UpdateContactRequest {
   social_yt?: string;
   social_ig?: string;
   social_github?: string;
+}
+
+export class ImageContactResponse {
+  id: number;
+  first_name: string;
+  email: string;
+  filename: string;
 }
