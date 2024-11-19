@@ -37,6 +37,7 @@ model Contact {
   social_yt       String?   @db.VarChar(100)
   social_ig       String?   @db.VarChar(100)
   social_github   String?   @db.VarChar(100)
+  photo           String?   @db.VarChar(255)
   userId          Int
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
