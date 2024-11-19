@@ -31,6 +31,7 @@ Response Body (Success) :
             "social-fb": "-",
             "social-yt": "-",
             "social-ig": "-",
+            "photo": "",
         },
         {
             "id": 2,
@@ -44,6 +45,7 @@ Response Body (Success) :
             "social-fb": "-",
             "social-yt": "-",
             "social-ig": "-",
+            "photo": "",
         },
     ],
     "paging" : {
