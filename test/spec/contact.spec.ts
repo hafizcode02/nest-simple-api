@@ -269,6 +269,23 @@ describe('User Controller Test', () => {
       expect(contactResponse.status).toBe(200);
       expect(contactResponse.body.data).toBeDefined();
     });
+
+    it('should be able to search contacts with page', async () => {
+      const user = await testService.createUser(true);
+      await testService.createContact(user.id);
+
+      const token = user.token;
+      const contactResponse = await request(app.getHttpServer())
+        .get('/api/contacts')
+        .query({ page: 1, size: 10 })
+        .set('Authorization', token);
+
+      logger.info(contactResponse.body);
+      console.log(contactResponse.body);
+
+      expect(contactResponse.status).toBe(200);
+      expect(contactResponse.body.data).toBeDefined();
+    });
   });
 
   afterAll(async () => {
