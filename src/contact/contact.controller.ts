@@ -40,6 +40,7 @@ export class ContactController {
 
   @Get()
   @HttpCode(200)
+  @UseRole(Role.USER)
   async searchContact(
     @Auth() user: User,
     @Query('name') name?: string,
