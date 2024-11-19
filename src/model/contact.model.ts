@@ -45,3 +45,11 @@ export class ImageContactResponse {
   email: string;
   photo: string;
 }
+
+export class SearchContactRequest {
+  name?: string;
+  email?: string;
+  phone?: string;
+  page: number;
+  size: number;
+}

@@ -8,10 +8,12 @@ import {
   ContactResponse,
   UpdateContactRequest,
   ImageContactResponse,
+  SearchContactRequest,
 } from '../model/contact.model';
 import { Logger } from 'winston';
 import { ContactValidation } from './contact.validation';
 import { Request } from 'express';
+import { JsonResponse } from 'src/model/json.model';
 
 @Injectable()
 export class ContactService {
@@ -156,6 +158,69 @@ export class ContactService {
       first_name: result.first_name,
       email: result.email,
       photo: result.photo,
+    };
+  }
+
+  async searchContact(
+    user: User,
+    request: SearchContactRequest,
+  ): Promise<JsonResponse<ContactResponse[]>> {
+    const searchRequest: SearchContactRequest = this.validationService.validate(
+      ContactValidation.SEARCH,
+      request,
+    );
+
+    const filters = [];
+
+    if (searchRequest.name) {
+      filters.push({
+        OR: [
+          {
+            first_name: {
+              contains: searchRequest.name,
+            },
+          },
+          {
+            last_name: {
+              contains: searchRequest.name,
+            },
+          },
+        ],
+      });
+    }
+
+    if (searchRequest.email) {
+      filters.push({
+        email: {
+          contains: searchRequest.email,
+        },
+      });
+    }
+
+    if (searchRequest.phone) {
+      filters.push({
+        phone: {
+          contains: searchRequest.phone,
+        },
+      });
+    }
+
+    const contacts = await this.prismaService.contact.findMany({
+      where: {
+        userId: user.id,
+        AND: filters,
+      },
+      take: searchRequest.size,
+      skip: (searchRequest.page - 1) * searchRequest.size,
+    });
+
+    return {
+      data: contacts.map((contact) => this.toContactResponse(contact)),
+      paging: {
+        size: searchRequest.size,
+        page: searchRequest.page,
+        current_page: Math.ceil(contacts.length / searchRequest.size),
+      },
     };
   }
 }

@@ -10,6 +10,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
   Req,
   UploadedFile,
   UseInterceptors,
@@ -21,6 +22,7 @@ import { JsonResponse } from '../model/json.model';
 import {
   ContactResponse,
   CreateContactRequest,
+  SearchContactRequest,
   UpdateContactRequest,
 } from '../model/contact.model';
 import { Auth } from '../common/auth/auth.decorator';
@@ -35,6 +37,27 @@ export class ContactController {
     private contactService: ContactService,
     private multerService: MulterService,
   ) {}
+
+  @Get()
+  @HttpCode(200)
+  async searchContact(
+    @Auth() user: User,
+    @Query('name') name?: string,
+    @Query('email') email?: string,
+    @Query('phone') phone?: string,
+    @Query('page') page?: number,
+    @Query('size') size?: number,
+  ): Promise<JsonResponse<ContactResponse[]>> {
+    const result = await this.contactService.searchContact(user, {
+      name: name,
+      email: email,
+      phone: phone,
+      page: page || 1,
+      size: size || 10,
+    } as SearchContactRequest);
+
+    return result;
+  }
 
   @Post()
   @HttpCode(201)
