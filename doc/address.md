@@ -13,7 +13,7 @@ Request Body :
     "city": "Kota",
     "province": "Provinsi",
     "country": "Negara",
-    "postal_code": "12344",
+    "postalCode": "12344",
     "detail": "lorem ipsum dolor sit amet" // optional
 }
 ```
@@ -28,7 +28,7 @@ Response Body (Success):
         "city": "Kota",
         "province": "Provinsi",
         "country": "Negara",
-        "postal_code": "12344",
+        "postalCode": "12344",
         "detail": "lorem ipsum dolor sit amet"
     }
 }
@@ -57,7 +57,7 @@ Response Body (Success):
         "city": "Kota",
         "province": "Provinsi",
         "country": "Negara",
-        "postal_code": "12344",
+        "postalCode": "12344",
         "detail": "lorem ipsum dolor sit amet"
     }
 }
@@ -83,7 +83,7 @@ Request Body :
     "city": "Kota",
     "province": "Provinsi",
     "country": "Negara",
-    "postal_code": "12344",
+    "postalCode": "12344",
     "detail": "lorem ipsum dolor sit amet" // optional
 }
 ```
@@ -98,7 +98,7 @@ Response Body (Success):
         "city": "Kota",
         "province": "Provinsi",
         "country": "Negara",
-        "postal_code": "12344",
+        "postalCode": "12344",
         "detail": "lorem ipsum dolor sit amet"
     }
 }
@@ -121,7 +121,7 @@ Response Body (Success):
 ```json
 {
     "message": "Address successfully updated!",
-    "data": true
+    "data": null
 }
 ```
 
@@ -149,7 +149,7 @@ Response Body (Success):
             "city": "Kota",
             "province": "Provinsi",
             "country": "Negara",
-            "postal_code": "12344",
+            "postalCode": "12344",
             "detail": "lorem ipsum dolor sit amet"
         }
     ]
