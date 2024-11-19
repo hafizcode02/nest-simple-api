@@ -268,6 +268,24 @@ describe('User Controller Test', () => {
 
       expect(contactResponse.status).toBe(200);
       expect(contactResponse.body.data).toBeDefined();
+      expect(contactResponse.body.data.length).toBe(1);
+    });
+
+    it('should return a response for not found search by name, email, or phone', async () => {
+      const user = await testService.createUser(true);
+      await testService.createContact(user.id);
+
+      const token = user.token;
+      const contactResponse = await request(app.getHttpServer())
+        .get('/api/contacts')
+        .query({ name: 'Abogo' })
+        .set('Authorization', token);
+
+      logger.info(contactResponse.body);
+
+      expect(contactResponse.status).toBe(200);
+      expect(contactResponse.body.data).toBeDefined();
+      expect(contactResponse.body.data.length).toBe(0);
     });
 
     it('should be able to search contacts with page', async () => {
