@@ -23,7 +23,6 @@ export class CreateContactRequest {
   social_yt?: string;
   social_ig?: string;
   social_github?: string;
-  userId: number;
 }
 
 export class UpdateContactRequest {

@@ -64,7 +64,6 @@ describe('User Controller Test', () => {
           social_yt: '',
           social_ig: '',
           social_github: '',
-          userId: user.id,
         });
 
       logger.info(contactResponse.body);

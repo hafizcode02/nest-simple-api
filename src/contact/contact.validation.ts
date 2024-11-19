@@ -14,7 +14,6 @@ export class ContactValidation {
     social_yt: z.string().max(100).optional(),
     social_ig: z.string().max(100).optional(),
     social_github: z.string().max(100).optional(),
-    userId: z.number(),
   });
 
   static readonly UPDATE: ZodType = z.object({
