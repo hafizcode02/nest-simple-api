@@ -155,7 +155,7 @@ export class ContactService {
       id: result.id,
       first_name: result.first_name,
       email: result.email,
-      filename: result.photo,
+      photo: result.photo,
     };
   }
 }

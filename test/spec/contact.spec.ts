@@ -194,6 +194,45 @@ describe('User Controller Test', () => {
     });
   });
 
+  describe('POST /api/contacts/:contactId/upload', () => {
+    beforeEach(async () => {
+      await testService.deleteContact();
+      await testService.deleteUser();
+    });
+
+    it('should return 404 if contact not found', async () => {
+      const user = await testService.createUser(true);
+
+      const token = user.token;
+      const contactResponse = await request(app.getHttpServer())
+        .post('/api/contacts/99/upload')
+        .set('Authorization', token)
+        .attach('file', 'test/assets/test.png');
+
+      console.log(contactResponse.body);
+
+      expect(contactResponse.status).toBe(404);
+      expect(contactResponse.body.errors).toBeDefined();
+    });
+
+    it('should upload a photo', async () => {
+      const user = await testService.createUser(true);
+      const contact = await testService.createContact(user.id);
+
+      const token = user.token;
+      const contactResponse = await request(app.getHttpServer())
+        .post(`/api/contacts/${contact.id}/upload`)
+        .set('Authorization', token)
+        .attach('file', 'test/assets/test.png');
+
+      logger.info(contactResponse.body);
+      console.log(contactResponse.body);
+
+      expect(contactResponse.status).toBe(201);
+      expect(contactResponse.body.data.photo).toBeDefined();
+    });
+  });
+
   afterAll(async () => {
     await testService.deleteContact();
     await testService.deleteUser();

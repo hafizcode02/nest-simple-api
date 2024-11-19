@@ -43,5 +43,5 @@ export class ImageContactResponse {
   id: number;
   first_name: string;
   email: string;
-  filename: string;
+  photo: string;
 }
