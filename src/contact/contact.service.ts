@@ -44,8 +44,6 @@ export class ContactService {
     user: User,
     contact: CreateContactRequest,
   ): Promise<ContactResponse> {
-    this.logger.debug(`Creating contact for user ${user.name}`);
-
     const contactRequest: CreateContactRequest =
       this.validationService.validate(ContactValidation.CREATE, contact);
 
@@ -130,9 +128,6 @@ export class ContactService {
     contactId: number,
     filename: string,
   ): Promise<ImageContactResponse> {
-    console.log('filename', filename);
-    console.log('contactId', contactId);
-    console.log('user', user);
     const contact = await this.prismaService.contact.findFirst({
       where: {
         id: contactId,
