@@ -165,18 +165,6 @@ export class AddressService {
     contactId: number,
     addressId: number,
   ): Promise<any> {
-    const checkAddressIsExistAndBelongsToContact =
-      await this.prismaService.address.findFirst({
-        where: {
-          id: addressId,
-          contactId: contactId,
-        },
-      });
-
-    if (!checkAddressIsExistAndBelongsToContact) {
-      throw new HttpException('Address not found', 404);
-    }
-
     const checkContactIsExistAndBelongsToUser =
       await this.prismaService.contact.findFirst({
         where: {
@@ -187,6 +175,18 @@ export class AddressService {
 
     if (!checkContactIsExistAndBelongsToUser) {
       throw new HttpException('Contact not found', 404);
+    }
+
+    const checkAddressIsExistAndBelongsToContact =
+      await this.prismaService.address.findFirst({
+        where: {
+          id: addressId,
+          contactId: contactId,
+        },
+      });
+
+    if (!checkAddressIsExistAndBelongsToContact) {
+      throw new HttpException('Address not found', 404);
     }
 
     await this.prismaService.address.delete({
