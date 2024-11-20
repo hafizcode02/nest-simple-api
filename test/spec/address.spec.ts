@@ -28,7 +28,7 @@ describe('Address Controller Test', () => {
     beforeEach(async () => {
       await testService.deleteAddress();
       await testService.deleteContact();
-      await testService.deleteUser();
+      await testService.deleteAll();
     });
 
     it('should return 400 if request is invalid', async () => {

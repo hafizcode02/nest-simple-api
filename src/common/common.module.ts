@@ -1,5 +1,4 @@
 import { Global, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
 import { PrismaService } from './prisma.service';
@@ -27,9 +26,6 @@ import { MulterService } from './multer.service';
           ),
         }),
       ],
-    }),
-    ConfigModule.forRoot({
-      isGlobal: true,
     }),
   ],
   controllers: [],

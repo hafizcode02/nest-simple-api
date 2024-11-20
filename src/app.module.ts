@@ -4,9 +4,13 @@ import { UserModule } from './user/user.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { ContactModule } from './contact/contact.module';
 import { AddressModule } from './address/address.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     ThrottlerModule.forRoot({
       throttlers: [
         {
