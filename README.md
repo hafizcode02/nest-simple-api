@@ -62,6 +62,16 @@ My Learning Project in Nest.JS, Creating Simple Contact API
 ## Project Endpoint
 
 You can see at **doc** folder or import the postman collection.
+or
+go to:
+
+```bash
+localhost:3000/api
+```
+
+```bash
+localhost:3000/api
+```
 
 ## Project setup
 
