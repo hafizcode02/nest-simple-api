@@ -91,4 +91,38 @@ export class TestService {
       },
     });
   }
+
+  async createAddress(contactId: number) {
+    const address = await this.prismaService.address.create({
+      data: {
+        street: 'Jl. Kenangan',
+        city: 'Jakarta',
+        province: 'DKI Jakarta',
+        postalCode: '12345',
+        country: 'Indonesia',
+        detail: '',
+        contactId: contactId,
+      },
+    });
+
+    return address;
+  }
+
+  async getAddress() {
+    const address = await this.prismaService.address.findFirst({
+      where: {
+        street: 'Jl. Kenangan',
+      },
+    });
+
+    return address;
+  }
+
+  async deleteAddress() {
+    await this.prismaService.address.deleteMany({
+      where: {
+        street: 'Jl. Kenangan',
+      },
+    });
+  }
 }
