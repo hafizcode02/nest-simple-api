@@ -30,7 +30,9 @@ import { User } from '@prisma/client';
 import { MulterService } from '../common/multer.service';
 import { MulterInterceptor } from '../common/multer.interceptor';
 import { Request } from 'express';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @Controller('/api/contacts')
 export class ContactController {
   constructor(

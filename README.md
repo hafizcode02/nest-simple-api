@@ -64,9 +64,7 @@ My Learning Project in Nest.JS, Creating Simple Contact API
 You can see at **doc** folder or import the postman collection.
 or you can go to swagger api docs:
 
-```bash
-localhost:3000/api
-```
+[SWAGGER API DOCS](https://localhost:3000/api)
 
 ## Project setup
 
