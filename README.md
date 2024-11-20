@@ -24,12 +24,67 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+My Learning Project in Nest.JS, Creating Simple Contact API
+
+## Project Checklist
+### User Endpoint
+- [x] Register User
+- [x] Send Email to Verify User
+- [x] Verify User
+- [x] Send Welcome Email after User Verified.
+- [x] Login User
+- [x] Get Logged In User
+- [x] Update User Data
+- [x] Logout User
+
+### Contact Endpoint
+- [x] Get All Contact & Search Contact
+- [x] Create Contact
+- [x] Get Contact
+- [x] Update Contact
+- [x] Update Contact Image
+- [x] Delete Contact
+
+### Address Endpoint
+- [x] Get All Addresses in the Contact
+- [x] Create Addresses of Contact
+- [x] Get Address
+- [x] Update Address
+- [x] Delete Address
+
+
+### Todo
+- [ ] Make Endpoint for forgot password
+- [ ] Setup Swagger UI
+- [ ] Create setup for multer to upload in cloud bucket like Cloudflare R2, AWS S3, or GCP Cloud Storage 
 
 ## Project setup
 
 ```bash
 $ npm install
+$ npx prisma init
+```
+
+## Setup your .env
+
+```bash
+DATABASE_URL="mysql://root:@localhost:3306/nest_contacts?schema=public"
+
+# MAIL CONFIG
+MAIL_HOST="yourwebserver.domain.com"
+MAIL_PORT=465
+MAIL_SECURE=true
+MAIL_USER=yourmail@domain.com
+MAIL_PASS=YourPassword
+
+# HASHIDS CONFIG
+HASHIDS_SALT=YOURSALT
+```
+
+## Run Prisma
+
+```bash
+$ npx prisma migrate dev
 ```
 
 ## Compile and run the project
@@ -50,12 +105,12 @@ $ npm run start:prod
 ```bash
 # unit tests
 $ npm run test
+```
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+## Another way to Run
+More simple shortcut to use in windows :D
+```bash
+run.bat dev|test|build|lint|prod
 ```
 
 ## Deployment
@@ -88,7 +143,7 @@ Check out a few resources that may come in handy when working with NestJS:
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
-## Stay in touch
+## Stay in touch (Nest.Js Author)
 
 - Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
 - Website - [https://nestjs.com](https://nestjs.com/)
