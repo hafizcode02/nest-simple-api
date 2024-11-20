@@ -2,9 +2,6 @@
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
   <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
     <p align="center">
 <a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
@@ -27,7 +24,9 @@
 My Learning Project in Nest.JS, Creating Simple Contact API
 
 ## Project Checklist
+
 ### User Endpoint
+
 - [x] Register User
 - [x] Send Email to Verify User
 - [x] Verify User
@@ -38,6 +37,7 @@ My Learning Project in Nest.JS, Creating Simple Contact API
 - [x] Logout User
 
 ### Contact Endpoint
+
 - [x] Get All Contact & Search Contact
 - [x] Create Contact
 - [x] Get Contact
@@ -46,26 +46,28 @@ My Learning Project in Nest.JS, Creating Simple Contact API
 - [x] Delete Contact
 
 ### Address Endpoint
+
 - [x] Get All Addresses in the Contact
 - [x] Create Addresses of Contact
 - [x] Get Address
 - [x] Update Address
 - [x] Delete Address
 
-
 ### Todo
+
 - [ ] Make Endpoint for forgot password
-- [ ] Setup Swagger UI
-- [ ] Create setup for multer to upload in cloud bucket like Cloudflare R2, AWS S3, or GCP Cloud Storage 
+- [x] Setup Swagger UI
+- [ ] Create setup for multer to upload in cloud bucket like Cloudflare R2, AWS S3, or GCP Cloud Storage
 
 ## Project Endpoint
+
 You can see at **doc** folder or import the postman collection.
 
 ## Project setup
 
 ```bash
-$ npm install
-$ npx prisma init
+npm install
+npx prisma init
 ```
 
 ## Setup your .env
@@ -87,7 +89,7 @@ HASHIDS_SALT=YOURSALT
 ## Run Prisma
 
 ```bash
-$ npx prisma migrate dev
+npx prisma migrate dev
 ```
 
 ## Compile and run the project
@@ -111,7 +113,9 @@ $ npm run test
 ```
 
 ## Another way to Run
+
 More simple shortcut to use in windows :D
+
 ```bash
 run.bat dev|test|build|lint|prod
 ```
@@ -123,8 +127,8 @@ When you're ready to deploy your NestJS application to production, there are som
 If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
 
 ```bash
-$ npm install -g mau
-$ mau deploy
+npm install -g mau
+mau deploy
 ```
 
 With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
