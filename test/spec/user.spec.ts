@@ -6,7 +6,7 @@ import { Logger } from 'winston';
 import { TestService } from './../test.service';
 import { TestModule } from './../test.module';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { HashidService } from './../../src/common/hashid.service';
+import { HashidService } from '../../src/common/helper/hashid.service';
 
 describe('User Controller Test', () => {
   let app: INestApplication;

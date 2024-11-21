@@ -1,14 +1,14 @@
 import { Global, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
-import { PrismaService } from './prisma.service';
-import { ValidationService } from './validation.service';
+import { PrismaService } from './helper/prisma.service';
+import { ValidationService } from './helper/validation.service';
 import { APP_FILTER } from '@nestjs/core';
-import { ExceptionService } from './exception.service';
-import { MailService } from './mail.service';
-import { HashidService } from './hashid.service';
+import { ExceptionService } from './helper/exception.service';
+import { MailService } from './mail/mail.service';
+import { HashidService } from './helper/hashid.service';
 import { AuthMiddleware } from './auth/auth.middleware';
-import { MulterService } from './multer.service';
+import { MulterService } from './multer/multer.service';
 
 @Global()
 @Module({

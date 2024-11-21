@@ -3,7 +3,7 @@ import * as nodemailer from 'nodemailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import { MailSubjectList, MailTemplate } from './mail.template';
 import { ConfigService } from '@nestjs/config';
-import { MailServiceException } from './exception.service';
+import { MailServiceException } from '../helper/exception.service';
 
 @Injectable()
 export class MailService {

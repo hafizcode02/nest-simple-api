@@ -12,7 +12,7 @@ export class MulterInterceptor {
   }) {
     return FileInterceptor('file', {
       storage: diskStorage({
-        destination: join(__dirname, '../../uploads'),
+        destination: join(__dirname, '../../../uploads'),
         filename: (req, file, callback) => {
           const timestamp = new Date().toISOString().replace(/[:.]/g, '-'); // Replace invalid characters for file names
           const ext = file.originalname.split('.').pop(); // Extract file extension

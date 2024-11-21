@@ -1,8 +1,8 @@
 import { HttpException, Inject, Injectable } from '@nestjs/common';
-import { PrismaService } from '../common/prisma.service';
+import { PrismaService } from '../common/helper/prisma.service';
 import { Logger } from 'winston';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { ValidationService } from '../common/validation.service';
+import { ValidationService } from '../common/helper/validation.service';
 import {
   AddressRequest,
   AddressResponse,

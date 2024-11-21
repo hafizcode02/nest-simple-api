@@ -7,8 +7,8 @@ import {
   Req,
 } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { PrismaService } from '../common/prisma.service';
-import { ValidationService } from '../common/validation.service';
+import { PrismaService } from '../common/helper/prisma.service';
+import { ValidationService } from '../common/helper/validation.service';
 import {
   LoginUserRequest,
   RegisterUserRequest,
@@ -18,10 +18,9 @@ import {
 import { Logger } from 'winston';
 import { UserValidation } from './user.validation';
 import * as bcrypt from 'bcrypt';
-import { MailService } from '../common/mail.service';
+import { MailService } from '../common/mail/mail.service';
 import { Request } from 'express';
-import { HashidService } from '../common/hashid.service';
-import { log } from 'console';
+import { HashidService } from '../common/helper/hashid.service';
 import { v4 as uuid } from 'uuid';
 import { User } from '@prisma/client';
 

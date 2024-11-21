@@ -27,8 +27,8 @@ import {
 } from '../model/contact.model';
 import { Auth } from '../common/auth/auth.decorator';
 import { User } from '@prisma/client';
-import { MulterService } from '../common/multer.service';
-import { MulterInterceptor } from '../common/multer.interceptor';
+import { MulterService } from '../common/multer/multer.service';
+import { MulterInterceptor } from '../common/multer/multer.interceptor';
 import { Request } from 'express';
 import { ApiBearerAuth } from '@nestjs/swagger';
 

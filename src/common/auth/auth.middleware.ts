@@ -1,5 +1,5 @@
 import { HttpException, Injectable, NestMiddleware } from '@nestjs/common';
-import { PrismaService } from '../prisma.service';
+import { PrismaService } from '../helper/prisma.service';
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
