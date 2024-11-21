@@ -9,7 +9,7 @@ import {
   AddressUpdateRequest,
 } from 'src/model/address.model';
 import { AddressValidation } from './address.validation';
-import { Address, User } from '@prisma/client';
+import { Address, Contact, User } from '@prisma/client';
 
 @Injectable()
 export class AddressService {
@@ -31,14 +31,33 @@ export class AddressService {
     };
   }
 
+  private async checkContactIsExistAndBelongsToUser(
+    contactId: number,
+    userId: number,
+  ): Promise<Contact> {
+    return await this.prismaService.contact.findFirst({
+      where: {
+        id: contactId,
+        userId: userId,
+      },
+    });
+  }
+
+  private async checkAddressIsExistAndBelongsToContact(
+    addressId: number,
+    contactId: number,
+  ): Promise<Address> {
+    return await this.prismaService.address.findFirst({
+      where: {
+        id: addressId,
+        contactId: contactId,
+      },
+    });
+  }
+
   async getAddress(user: User, contactId: number): Promise<AddressResponse[]> {
     const checkContactIsExistAndBelongsToUser =
-      await this.prismaService.contact.findFirst({
-        where: {
-          id: contactId,
-          userId: user.id,
-        },
-      });
+      await this.checkContactIsExistAndBelongsToUser(contactId, user.id);
 
     if (!checkContactIsExistAndBelongsToUser) {
       throw new HttpException('Contact not found', 404);
@@ -59,12 +78,7 @@ export class AddressService {
     address: AddressRequest,
   ): Promise<AddressResponse> {
     const checkContactIsExistAndBelongsToUser =
-      await this.prismaService.contact.findFirst({
-        where: {
-          id: contactId,
-          userId: user.id,
-        },
-      });
+      await this.checkContactIsExistAndBelongsToUser(contactId, user.id);
 
     if (!checkContactIsExistAndBelongsToUser) {
       throw new HttpException('Contact not found', 404);
@@ -91,12 +105,7 @@ export class AddressService {
     addressId: number,
   ): Promise<AddressResponse> {
     const checkContactIsExistAndBelongsToUser =
-      await this.prismaService.contact.findFirst({
-        where: {
-          id: contactId,
-          userId: user.id,
-        },
-      });
+      await this.checkContactIsExistAndBelongsToUser(contactId, user.id);
 
     if (!checkContactIsExistAndBelongsToUser) {
       throw new HttpException('Contact not found', 404);
@@ -122,12 +131,7 @@ export class AddressService {
     address: AddressUpdateRequest,
   ): Promise<AddressResponse> {
     const checkContactIsExistAndBelongsToUser =
-      await this.prismaService.contact.findFirst({
-        where: {
-          id: contactId,
-          userId: user.id,
-        },
-      });
+      await this.checkContactIsExistAndBelongsToUser(contactId, user.id);
 
     if (!checkContactIsExistAndBelongsToUser) {
       throw new HttpException('Contact not found', 404);
@@ -137,12 +141,7 @@ export class AddressService {
       this.validationService.validate(AddressValidation.UPDATE, address);
 
     const checkAddressIsExistAndBelongsToContact =
-      await this.prismaService.address.findFirst({
-        where: {
-          id: addressId,
-          contactId: contactId,
-        },
-      });
+      await this.checkAddressIsExistAndBelongsToContact(addressId, contactId);
 
     if (!checkAddressIsExistAndBelongsToContact) {
       throw new HttpException('Address not found', 404);
@@ -166,24 +165,14 @@ export class AddressService {
     addressId: number,
   ): Promise<any> {
     const checkContactIsExistAndBelongsToUser =
-      await this.prismaService.contact.findFirst({
-        where: {
-          id: contactId,
-          userId: user.id,
-        },
-      });
+      await this.checkContactIsExistAndBelongsToUser(contactId, user.id);
 
     if (!checkContactIsExistAndBelongsToUser) {
       throw new HttpException('Contact not found', 404);
     }
 
     const checkAddressIsExistAndBelongsToContact =
-      await this.prismaService.address.findFirst({
-        where: {
-          id: addressId,
-          contactId: contactId,
-        },
-      });
+      await this.checkAddressIsExistAndBelongsToContact(addressId, contactId);
 
     if (!checkAddressIsExistAndBelongsToContact) {
       throw new HttpException('Address not found', 404);
