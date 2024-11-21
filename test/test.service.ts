@@ -15,7 +15,7 @@ export class TestService {
     });
   }
 
-  async deleteAll() {
+  async deleteAllUser() {
     await this.prismaService.user.deleteMany();
   }
 

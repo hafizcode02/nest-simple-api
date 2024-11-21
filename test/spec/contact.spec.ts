@@ -26,7 +26,7 @@ describe('Contact Controller Test', () => {
 
   describe('POST /api/contacts/', () => {
     beforeEach(async () => {
-      await testService.deleteAll();
+      await testService.deleteUser();
     });
 
     it('should return 400 if request is invalid', async () => {

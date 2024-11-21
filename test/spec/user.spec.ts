@@ -29,7 +29,7 @@ describe('User Controller Test', () => {
 
   describe('POST /api/users', () => {
     beforeEach(async () => {
-      await testService.deleteAll();
+      await testService.deleteAllUser();
     });
 
     it('should be return 400 when request is invalid', async () => {
@@ -47,7 +47,7 @@ describe('User Controller Test', () => {
       const response = await request(app.getHttpServer())
         .post('/api/users')
         .send({
-          email: 'example@example.com',
+          email: 'jayog57874@gitated.com', // temp mail
           name: 'example',
           username: 'example',
           password: 'secret123',
@@ -57,7 +57,7 @@ describe('User Controller Test', () => {
       logger.info(response.body);
 
       expect(response.status).toBe(201);
-      expect(response.body.data.email).toBe('example@example.com');
+      expect(response.body.data.email).toBe('jayog57874@gitated.com');
       expect(response.body.data.emailSent).toBe(true);
     });
 
@@ -315,6 +315,6 @@ describe('User Controller Test', () => {
   });
 
   afterAll(async () => {
-    await testService.deleteUser();
+    await testService.deleteAllUser();
   });
 });
