@@ -110,9 +110,16 @@ $ npm run start:prod
 
 ## Run tests
 
+Make sure you change the email for testing in **should be return 201 when request is valid and success register** at **user.spec.ts**
+
 ```bash
-# unit tests
+# unit tests (empty record in db)
 $ npm run test
+
+# have record in db (run partial)
+$ npm run test -- user.spec.ts
+$ npm run test -- contact.spec.ts
+$ npm run test -- address.spec.ts
 ```
 
 ## Another way to Run
