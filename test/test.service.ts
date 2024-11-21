@@ -15,6 +15,10 @@ export class TestService {
     });
   }
 
+  async deleteAll() {
+    await this.prismaService.user.deleteMany();
+  }
+
   async createUser(isVerified: boolean = false) {
     const createdUser = await this.prismaService.user.create({
       data: {

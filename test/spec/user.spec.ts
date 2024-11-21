@@ -29,7 +29,7 @@ describe('User Controller Test', () => {
 
   describe('POST /api/users', () => {
     beforeEach(async () => {
-      await testService.deleteUser();
+      await testService.deleteAll();
     });
 
     it('should be return 400 when request is invalid', async () => {
@@ -47,9 +47,9 @@ describe('User Controller Test', () => {
       const response = await request(app.getHttpServer())
         .post('/api/users')
         .send({
-          email: 'log@hafizcaniago.my.id',
-          name: 'Hafiz Caniago',
-          username: 't.hafigo',
+          email: 'example@example.com',
+          name: 'example',
+          username: 'example',
           password: 'secret123',
           confirmPassword: 'secret123',
         });
@@ -57,9 +57,9 @@ describe('User Controller Test', () => {
       logger.info(response.body);
 
       expect(response.status).toBe(201);
-      expect(response.body.data.email).toBe('log@hafizcaniago.my.id');
+      expect(response.body.data.email).toBe('example@example.com');
       expect(response.body.data.emailSent).toBe(true);
-    }, 30000);
+    });
 
     it('should be return 400 when username or email is already taken', async () => {
       await testService.createUser();
@@ -77,7 +77,7 @@ describe('User Controller Test', () => {
 
       expect(response.status).toBe(400);
       expect(response.body.errors).toBeDefined();
-    });
+    }, 30000);
 
     it('should be return 200 and can verify email users', async () => {
       const user = await testService.createUser();

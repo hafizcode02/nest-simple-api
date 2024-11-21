@@ -21,6 +21,7 @@ import { UseRole } from '../common/auth/role.decorator';
 import { User } from '@prisma/client';
 import { Role } from '../common/auth/role.enum';
 import { Auth } from '../common/auth/auth.decorator';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('/api/users')
 export class UserController {
@@ -57,6 +58,7 @@ export class UserController {
     };
   }
 
+  @ApiBearerAuth()
   @Get('/current')
   @HttpCode(200)
   @UseRole(Role.ADMIN, Role.USER)
@@ -69,6 +71,7 @@ export class UserController {
     };
   }
 
+  @ApiBearerAuth()
   @Patch('/current')
   @HttpCode(200)
   @UseRole(Role.ADMIN, Role.USER)
@@ -82,6 +85,7 @@ export class UserController {
     };
   }
 
+  @ApiBearerAuth()
   @Post('/logout')
   @HttpCode(200)
   @UseRole(Role.ADMIN, Role.USER)
