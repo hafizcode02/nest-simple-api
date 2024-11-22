@@ -7,21 +7,20 @@ import {
   Req,
 } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { PrismaService } from '../common/prisma.service';
-import { ValidationService } from '../common/validation.service';
+import { PrismaService } from '../common/helper/prisma.service';
+import { ValidationService } from '../common/helper/validation.service';
 import {
-  LoginUserRequest,
-  RegisterUserRequest,
-  UpdateUserRequest,
-  UserResponse,
-} from '../model/user.model';
+  LoginUserDto,
+  RegisterUserDto,
+  UpdateUserDto,
+  UserResponseDto,
+} from './user.dto';
 import { Logger } from 'winston';
 import { UserValidation } from './user.validation';
 import * as bcrypt from 'bcrypt';
-import { MailService } from '../common/mail.service';
+import { MailService } from '../common/mail/mail.service';
 import { Request } from 'express';
-import { HashidService } from '../common/hashid.service';
-import { log } from 'console';
+import { HashidService } from '../common/helper/hashid.service';
 import { v4 as uuid } from 'uuid';
 import { User } from '@prisma/client';
 
@@ -37,12 +36,14 @@ export class UserService {
 
   async register(
     @Req() expressReq: Request,
-    request: RegisterUserRequest,
-  ): Promise<UserResponse> {
+    request: RegisterUserDto,
+  ): Promise<UserResponseDto> {
     this.logger.debug(`Registering user ${JSON.stringify(request)}`);
 
-    const registerRequest: RegisterUserRequest =
-      this.validationService.validate(UserValidation.REGISTER, request);
+    const registerRequest: RegisterUserDto = this.validationService.validate(
+      UserValidation.REGISTER,
+      request,
+    );
 
     const checkUser = await this.prismaService.user.findFirst({
       where: {
@@ -123,10 +124,10 @@ export class UserService {
     return 'Email Verified Successfully';
   }
 
-  async login(request: LoginUserRequest): Promise<UserResponse> {
+  async login(request: LoginUserDto): Promise<UserResponseDto> {
     this.logger.debug('UserService.login() ', JSON.stringify(request));
 
-    const loginRequest: LoginUserRequest = this.validationService.validate(
+    const loginRequest: LoginUserDto = this.validationService.validate(
       UserValidation.LOGIN,
       request,
     );
@@ -181,7 +182,7 @@ export class UserService {
     };
   }
 
-  async getLoggedInUser(user: User): Promise<UserResponse> {
+  async getLoggedInUser(user: User): Promise<UserResponseDto> {
     return {
       email: user.email,
       username: user.username,
@@ -189,12 +190,12 @@ export class UserService {
     };
   }
 
-  async update(user: User, request: UpdateUserRequest): Promise<UserResponse> {
+  async update(user: User, request: UpdateUserDto): Promise<UserResponseDto> {
     this.logger.debug(
       `UserService.update() : ${JSON.stringify(user)}`,
       JSON.stringify(request),
     );
-    const updateRequest: UpdateUserRequest = this.validationService.validate(
+    const updateRequest: UpdateUserDto = this.validationService.validate(
       UserValidation.UPDATE,
       request,
     );

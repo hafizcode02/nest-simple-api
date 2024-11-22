@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class AddressRequest {
+export class CreateAddressDto {
   @ApiProperty({
     example: 'Jl. Kenangan',
   })
@@ -32,7 +32,7 @@ export class AddressRequest {
   detail?: string;
 }
 
-export class AddressResponse {
+export class AddressDto {
   id: number;
   street: string;
   city: string;
@@ -42,7 +42,7 @@ export class AddressResponse {
   detail: string;
 }
 
-export class AddressUpdateRequest {
+export class UpdateAddressDto {
   @ApiProperty({
     example: '1840 Democracy Point',
   })

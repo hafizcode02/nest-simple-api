@@ -18,17 +18,17 @@ import {
 import { ContactService } from './contact.service';
 import { UseRole } from '../common/auth/role.decorator';
 import { Role } from '../common/auth/role.enum';
-import { JsonResponse } from '../model/json.model';
+import { BaseResponseDto } from '../common/dto/base.dto';
 import {
-  ContactResponse,
-  CreateContactRequest,
-  SearchContactRequest,
-  UpdateContactRequest,
-} from '../model/contact.model';
+  ContactDto,
+  CreateContactDto,
+  SearchContactDto,
+  UpdateContactDto,
+} from './contact.dto';
 import { Auth } from '../common/auth/auth.decorator';
 import { User } from '@prisma/client';
-import { MulterService } from '../common/multer.service';
-import { MulterInterceptor } from '../common/multer.interceptor';
+import { MulterService } from '../common/multer/multer.service';
+import { MulterInterceptor } from '../common/multer/multer.interceptor';
 import { Request } from 'express';
 import { ApiBearerAuth } from '@nestjs/swagger';
 
@@ -50,14 +50,14 @@ export class ContactController {
     @Query('phone') phone?: string,
     @Query('page', new ParseIntPipe({ optional: true })) page?: number,
     @Query('size', new ParseIntPipe({ optional: true })) size?: number,
-  ): Promise<JsonResponse<ContactResponse[]>> {
+  ): Promise<BaseResponseDto<ContactDto[]>> {
     const result = await this.contactService.searchContact(user, {
       name: name,
       email: email,
       phone: phone,
       page: page || 1,
       size: size || 10,
-    } as SearchContactRequest);
+    } as SearchContactDto);
 
     return result;
   }
@@ -67,8 +67,8 @@ export class ContactController {
   @UseRole(Role.USER)
   async create(
     @Auth() user: User,
-    @Body() request: CreateContactRequest,
-  ): Promise<JsonResponse<ContactResponse>> {
+    @Body() request: CreateContactDto,
+  ): Promise<BaseResponseDto<ContactDto>> {
     const result = await this.contactService.create(user, request);
     return {
       data: result,
@@ -81,7 +81,7 @@ export class ContactController {
   async getContact(
     @Auth() user: User,
     @Param('contactId', ParseIntPipe) contactId: number,
-  ): Promise<JsonResponse<ContactResponse>> {
+  ): Promise<BaseResponseDto<ContactDto>> {
     const result = await this.contactService.getContact(user, contactId);
 
     return {
@@ -95,8 +95,8 @@ export class ContactController {
   async updateContact(
     @Auth() user: User,
     @Param('contactId', ParseIntPipe) contactId: number,
-    @Body() request: UpdateContactRequest,
-  ): Promise<JsonResponse<ContactResponse>> {
+    @Body() request: UpdateContactDto,
+  ): Promise<BaseResponseDto<ContactDto>> {
     const result = await this.contactService.updateContact(
       user,
       contactId,
@@ -114,7 +114,7 @@ export class ContactController {
   async deleteContact(
     @Auth() user: User,
     @Param('contactId', ParseIntPipe) contactId: number,
-  ): Promise<JsonResponse<ContactResponse>> {
+  ): Promise<BaseResponseDto<ContactDto>> {
     await this.contactService.deleteContact(user, contactId);
 
     return {
@@ -138,7 +138,7 @@ export class ContactController {
     @UploadedFile() file: Express.Multer.File,
     @Param('contactId', ParseIntPipe) contactId: number,
     @Req() req: Request,
-  ): Promise<JsonResponse<any>> {
+  ): Promise<BaseResponseDto<any>> {
     if (!file) {
       throw new HttpException('No file provided!', HttpStatus.BAD_REQUEST);
     }

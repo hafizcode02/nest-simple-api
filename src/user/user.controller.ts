@@ -10,12 +10,12 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import {
-  LoginUserRequest,
-  RegisterUserRequest,
-  UpdateUserRequest,
-  UserResponse,
-} from '../model/user.model';
-import { JsonResponse } from '../model/json.model';
+  LoginUserDto,
+  RegisterUserDto,
+  UpdateUserDto,
+  UserResponseDto,
+} from './user.dto';
+import { BaseResponseDto } from '../common/dto/base.dto';
 import { Request } from 'express';
 import { UseRole } from '../common/auth/role.decorator';
 import { User } from '@prisma/client';
@@ -31,8 +31,8 @@ export class UserController {
   @HttpCode(201)
   async register(
     @Req() expressReq: Request,
-    @Body() request: RegisterUserRequest,
-  ): Promise<JsonResponse<UserResponse>> {
+    @Body() request: RegisterUserDto,
+  ): Promise<BaseResponseDto<UserResponseDto>> {
     const result = await this.userService.register(expressReq, request);
     return {
       data: result,
@@ -40,7 +40,9 @@ export class UserController {
   }
 
   @Get('/verify-email/:hash')
-  async verifyEmail(@Param('hash') hash: string): Promise<JsonResponse<any>> {
+  async verifyEmail(
+    @Param('hash') hash: string,
+  ): Promise<BaseResponseDto<any>> {
     const result = await this.userService.verifyEmail(hash);
     return {
       message: result,
@@ -50,8 +52,8 @@ export class UserController {
   @Post('/login')
   @HttpCode(200)
   async login(
-    @Body() request: LoginUserRequest,
-  ): Promise<JsonResponse<UserResponse>> {
+    @Body() request: LoginUserDto,
+  ): Promise<BaseResponseDto<UserResponseDto>> {
     const result = await this.userService.login(request);
     return {
       data: result,
@@ -64,7 +66,7 @@ export class UserController {
   @UseRole(Role.ADMIN, Role.USER)
   async getLoggedInUser(
     @Auth() user: User,
-  ): Promise<JsonResponse<UserResponse>> {
+  ): Promise<BaseResponseDto<UserResponseDto>> {
     const result = await this.userService.getLoggedInUser(user);
     return {
       data: result,
@@ -77,8 +79,8 @@ export class UserController {
   @UseRole(Role.ADMIN, Role.USER)
   async updateUser(
     @Auth() user: User,
-    @Body() request: UpdateUserRequest,
-  ): Promise<JsonResponse<UserResponse>> {
+    @Body() request: UpdateUserDto,
+  ): Promise<BaseResponseDto<UserResponseDto>> {
     const result = await this.userService.update(user, request);
     return {
       data: result,
@@ -89,7 +91,7 @@ export class UserController {
   @Post('/logout')
   @HttpCode(200)
   @UseRole(Role.ADMIN, Role.USER)
-  async logout(@Auth() user: User): Promise<JsonResponse<UserResponse>> {
+  async logout(@Auth() user: User): Promise<BaseResponseDto<UserResponseDto>> {
     await this.userService.logout(user);
     return {
       message: 'Logged out successfully',

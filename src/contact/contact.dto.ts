@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class ContactResponse {
+export class ContactDto {
   id: number;
   first_name: string;
   last_name: string;
@@ -15,7 +15,7 @@ export class ContactResponse {
   photo?: string;
 }
 
-export class CreateContactRequest {
+export class CreateContactDto {
   @ApiProperty({
     example: 'Example',
   })
@@ -43,7 +43,7 @@ export class CreateContactRequest {
   social_github?: string;
 }
 
-export class UpdateContactRequest {
+export class UpdateContactDto {
   @ApiProperty({
     example: 'Updated Example',
   })
@@ -71,14 +71,14 @@ export class UpdateContactRequest {
   social_github?: string;
 }
 
-export class ImageContactResponse {
+export class ImageContactDto {
   id: number;
   first_name: string;
   email: string;
   photo: string;
 }
 
-export class SearchContactRequest {
+export class SearchContactDto {
   @ApiProperty({
     example: 'Example',
   })
