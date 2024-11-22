@@ -40,6 +40,18 @@ export class ContactService {
     };
   }
 
+  private async checkContact(
+    contactId: number,
+    userId: number,
+  ): Promise<Contact> {
+    return await this.prismaService.contact.findFirst({
+      where: {
+        id: contactId,
+        userId: userId,
+      },
+    });
+  }
+
   async create(user: User, contact: CreateContactDto): Promise<ContactDto> {
     const contactRequest: CreateContactDto = this.validationService.validate(
       ContactValidation.CREATE,
@@ -57,18 +69,13 @@ export class ContactService {
   }
 
   async getContact(user: User, contactId: number): Promise<ContactDto> {
-    const contact = await this.prismaService.contact.findFirst({
-      where: {
-        id: contactId,
-        userId: user.id,
-      },
-    });
+    const contactExist = await this.checkContact(contactId, user.id);
 
-    if (!contact) {
+    if (!contactExist) {
       throw new HttpException('Contact not found', HttpStatus.NOT_FOUND);
     }
 
-    return this.toContactResponse(contact);
+    return this.toContactResponse(contactExist);
   }
 
   async updateContact(
@@ -81,14 +88,9 @@ export class ContactService {
       contact,
     );
 
-    const existingContact = await this.prismaService.contact.findFirst({
-      where: {
-        id: contactId,
-        userId: user.id,
-      },
-    });
+    const contactExist = await this.checkContact(contactId, user.id);
 
-    if (!existingContact) {
+    if (!contactExist) {
       throw new HttpException('Contact not found', HttpStatus.NOT_FOUND);
     }
 
@@ -104,19 +106,14 @@ export class ContactService {
     return this.toContactResponse(updatedContact);
   }
 
-  async deleteContact(user: User, contactId: number): Promise<void> {
-    const contact = await this.prismaService.contact.findFirst({
-      where: {
-        id: contactId,
-        userId: user.id,
-      },
-    });
+  async deleteContact(user: User, contactId: number): Promise<ContactDto> {
+    const contactExist = await this.checkContact(contactId, user.id);
 
-    if (!contact) {
+    if (!contactExist) {
       throw new HttpException('Contact not found', HttpStatus.NOT_FOUND);
     }
 
-    await this.prismaService.contact.delete({
+    return await this.prismaService.contact.delete({
       where: {
         id: contactId,
       },
@@ -129,14 +126,9 @@ export class ContactService {
     contactId: number,
     filename: string,
   ): Promise<ImageContactDto> {
-    const contact = await this.prismaService.contact.findFirst({
-      where: {
-        id: contactId,
-        userId: user.id,
-      },
-    });
+    const contactExist = await this.checkContact(contactId, user.id);
 
-    if (!contact) {
+    if (!contactExist) {
       throw new HttpException('Contact not found', HttpStatus.NOT_FOUND);
     }
 
