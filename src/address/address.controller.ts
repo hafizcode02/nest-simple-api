@@ -10,8 +10,8 @@ import {
   Post,
 } from '@nestjs/common';
 import { AddressService } from './address.service';
-import { JsonResponse } from '../model/json.model';
-import { AddressRequest, AddressResponse } from '../model/address.model';
+import { BaseResponseDto } from '../common/dto/base.dto';
+import { CreateAddressDto, AddressDto } from './address.dto';
 import { UseRole } from '../common/auth/role.decorator';
 import { Role } from '../common/auth/role.enum';
 import { Auth } from '../common/auth/auth.decorator';
@@ -27,7 +27,7 @@ export class AddressController {
   async getAddress(
     @Auth() user: User,
     @Param('contactId', ParseIntPipe) contactId: number,
-  ): Promise<JsonResponse<AddressResponse[]>> {
+  ): Promise<BaseResponseDto<AddressDto[]>> {
     const address = await this.addressService.getAddress(user, contactId);
     return {
       message: 'Address retrieved successfully',
@@ -41,8 +41,8 @@ export class AddressController {
   async postAddress(
     @Auth() user: User,
     @Param('contactId', ParseIntPipe) contactId: number,
-    @Body() address: AddressRequest,
-  ): Promise<JsonResponse<AddressResponse>> {
+    @Body() address: CreateAddressDto,
+  ): Promise<BaseResponseDto<AddressDto>> {
     const newAddress = await this.addressService.createAddress(
       user,
       contactId,
@@ -61,7 +61,7 @@ export class AddressController {
     @Auth() user: User,
     @Param('contactId', ParseIntPipe) contactId: number,
     @Param('addressId', ParseIntPipe) addressId: number,
-  ): Promise<JsonResponse<AddressResponse>> {
+  ): Promise<BaseResponseDto<AddressDto>> {
     const address = await this.addressService.getAddressById(
       user,
       contactId,
@@ -80,8 +80,8 @@ export class AddressController {
     @Auth() user: User,
     @Param('contactId', ParseIntPipe) contactId: number,
     @Param('addressId', ParseIntPipe) addressId: number,
-    @Body() address: AddressRequest,
-  ): Promise<JsonResponse<AddressResponse>> {
+    @Body() address: CreateAddressDto,
+  ): Promise<BaseResponseDto<AddressDto>> {
     const updatedAddress = await this.addressService.updateAddress(
       user,
       contactId,
@@ -101,7 +101,7 @@ export class AddressController {
     @Auth() user: User,
     @Param('contactId', ParseIntPipe) contactId: number,
     @Param('addressId', ParseIntPipe) addressId: number,
-  ): Promise<JsonResponse<void>> {
+  ): Promise<BaseResponseDto<void>> {
     const result = await this.addressService.deleteAddress(
       user,
       contactId,

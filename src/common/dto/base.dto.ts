@@ -1,4 +1,4 @@
-export class JsonResponse<T> {
+export class BaseResponseDto<T> {
   message?: string;
   data?: T;
   error?: string;

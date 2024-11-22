@@ -47,7 +47,7 @@ describe('User Controller Test', () => {
       const response = await request(app.getHttpServer())
         .post('/api/users')
         .send({
-          email: 'jayog57874@gitated.com', // temp mail
+          email: 'cohaza1900@getairmail.com', // temp mail
           name: 'example',
           username: 'example',
           password: 'secret123',
@@ -57,7 +57,7 @@ describe('User Controller Test', () => {
       logger.info(response.body);
 
       expect(response.status).toBe(201);
-      expect(response.body.data.email).toBe('jayog57874@gitated.com');
+      expect(response.body.data.email).toBe('cohaza1900@getairmail.com');
       expect(response.body.data.emailSent).toBe(true);
     });
 

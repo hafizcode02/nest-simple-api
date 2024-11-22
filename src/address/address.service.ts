@@ -4,10 +4,10 @@ import { Logger } from 'winston';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { ValidationService } from '../common/helper/validation.service';
 import {
-  AddressRequest,
-  AddressResponse,
-  AddressUpdateRequest,
-} from 'src/model/address.model';
+  CreateAddressDto,
+  AddressDto,
+  UpdateAddressDto,
+} from 'src/address/address.dto';
 import { AddressValidation } from './address.validation';
 import { Address, Contact, User } from '@prisma/client';
 
@@ -19,7 +19,7 @@ export class AddressService {
     private validationService: ValidationService,
   ) {}
 
-  private toAddressResponse(address: Address): AddressResponse {
+  private toAddressResponse(address: Address): AddressDto {
     return {
       id: address.id,
       street: address.street,
@@ -55,7 +55,7 @@ export class AddressService {
     });
   }
 
-  async getAddress(user: User, contactId: number): Promise<AddressResponse[]> {
+  async getAddress(user: User, contactId: number): Promise<AddressDto[]> {
     const checkContactIsExistAndBelongsToUser =
       await this.checkContactIsExistAndBelongsToUser(contactId, user.id);
 
@@ -75,8 +75,8 @@ export class AddressService {
   async createAddress(
     user: User,
     contactId: number,
-    address: AddressRequest,
-  ): Promise<AddressResponse> {
+    address: CreateAddressDto,
+  ): Promise<AddressDto> {
     const checkContactIsExistAndBelongsToUser =
       await this.checkContactIsExistAndBelongsToUser(contactId, user.id);
 
@@ -84,14 +84,14 @@ export class AddressService {
       throw new HttpException('Contact not found', 404);
     }
 
-    const addressRequest: AddressRequest = this.validationService.validate(
+    const CreateAddressDto: CreateAddressDto = this.validationService.validate(
       AddressValidation.CREATE,
       address,
     );
 
     const result = await this.prismaService.address.create({
       data: {
-        ...addressRequest,
+        ...CreateAddressDto,
         contactId: contactId,
       },
     });
@@ -103,7 +103,7 @@ export class AddressService {
     user: User,
     contactId: number,
     addressId: number,
-  ): Promise<AddressResponse> {
+  ): Promise<AddressDto> {
     const checkContactIsExistAndBelongsToUser =
       await this.checkContactIsExistAndBelongsToUser(contactId, user.id);
 
@@ -128,8 +128,8 @@ export class AddressService {
     user: User,
     contactId: number,
     addressId: number,
-    address: AddressUpdateRequest,
-  ): Promise<AddressResponse> {
+    address: UpdateAddressDto,
+  ): Promise<AddressDto> {
     const checkContactIsExistAndBelongsToUser =
       await this.checkContactIsExistAndBelongsToUser(contactId, user.id);
 
@@ -137,8 +137,10 @@ export class AddressService {
       throw new HttpException('Contact not found', 404);
     }
 
-    const addressRequest: AddressUpdateRequest =
-      this.validationService.validate(AddressValidation.UPDATE, address);
+    const CreateAddressDto: UpdateAddressDto = this.validationService.validate(
+      AddressValidation.UPDATE,
+      address,
+    );
 
     const checkAddressIsExistAndBelongsToContact =
       await this.checkAddressIsExistAndBelongsToContact(addressId, contactId);
@@ -152,7 +154,7 @@ export class AddressService {
         id: addressId,
       },
       data: {
-        ...addressRequest,
+        ...CreateAddressDto,
       },
     });
 

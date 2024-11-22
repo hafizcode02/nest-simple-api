@@ -4,16 +4,16 @@ import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { PrismaService } from '../common/helper/prisma.service';
 import { ValidationService } from '../common/helper/validation.service';
 import {
-  CreateContactRequest,
-  ContactResponse,
-  UpdateContactRequest,
-  ImageContactResponse,
-  SearchContactRequest,
-} from '../model/contact.model';
+  CreateContactDto,
+  ContactDto,
+  UpdateContactDto,
+  ImageContactDto,
+  SearchContactDto,
+} from './contact.dto';
 import { Logger } from 'winston';
 import { ContactValidation } from './contact.validation';
 import { Request } from 'express';
-import { JsonResponse } from 'src/model/json.model';
+import { BaseResponseDto } from 'src/common/dto/base.dto';
 
 @Injectable()
 export class ContactService {
@@ -23,7 +23,7 @@ export class ContactService {
     private validationService: ValidationService,
   ) {}
 
-  private toContactResponse(contact: Contact): ContactResponse {
+  private toContactResponse(contact: Contact): ContactDto {
     return {
       id: contact.id,
       first_name: contact.first_name,
@@ -40,12 +40,11 @@ export class ContactService {
     };
   }
 
-  async create(
-    user: User,
-    contact: CreateContactRequest,
-  ): Promise<ContactResponse> {
-    const contactRequest: CreateContactRequest =
-      this.validationService.validate(ContactValidation.CREATE, contact);
+  async create(user: User, contact: CreateContactDto): Promise<ContactDto> {
+    const contactRequest: CreateContactDto = this.validationService.validate(
+      ContactValidation.CREATE,
+      contact,
+    );
 
     const result = await this.prismaService.contact.create({
       data: {
@@ -57,7 +56,7 @@ export class ContactService {
     return this.toContactResponse(result);
   }
 
-  async getContact(user: User, contactId: number): Promise<ContactResponse> {
+  async getContact(user: User, contactId: number): Promise<ContactDto> {
     const contact = await this.prismaService.contact.findFirst({
       where: {
         id: contactId,
@@ -75,10 +74,12 @@ export class ContactService {
   async updateContact(
     user: User,
     contactId: number,
-    contact: UpdateContactRequest,
-  ): Promise<ContactResponse> {
-    const contactRequest: UpdateContactRequest =
-      this.validationService.validate(ContactValidation.UPDATE, contact);
+    contact: UpdateContactDto,
+  ): Promise<ContactDto> {
+    const contactRequest: UpdateContactDto = this.validationService.validate(
+      ContactValidation.UPDATE,
+      contact,
+    );
 
     const existingContact = await this.prismaService.contact.findFirst({
       where: {
@@ -127,7 +128,7 @@ export class ContactService {
     req: Request,
     contactId: number,
     filename: string,
-  ): Promise<ImageContactResponse> {
+  ): Promise<ImageContactDto> {
     const contact = await this.prismaService.contact.findFirst({
       where: {
         id: contactId,
@@ -158,9 +159,9 @@ export class ContactService {
 
   async searchContact(
     user: User,
-    request: SearchContactRequest,
-  ): Promise<JsonResponse<ContactResponse[]>> {
-    const searchRequest: SearchContactRequest = this.validationService.validate(
+    request: SearchContactDto,
+  ): Promise<BaseResponseDto<ContactDto[]>> {
+    const searchRequest: SearchContactDto = this.validationService.validate(
       ContactValidation.SEARCH,
       request,
     );

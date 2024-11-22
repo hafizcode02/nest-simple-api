@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class RegisterUserRequest {
+export class RegisterUserDto {
   @ApiProperty({
     type: String,
     minimum: 3,
@@ -42,7 +42,7 @@ export class RegisterUserRequest {
   confirmPassword?: string;
 }
 
-export class UserResponse {
+export class UserResponseDto {
   email?: string;
   username: string;
   name: string;
@@ -50,7 +50,7 @@ export class UserResponse {
   emailSent?: boolean;
 }
 
-export class LoginUserRequest {
+export class LoginUserDto {
   @ApiProperty({
     type: String,
     example: 'example',
@@ -64,7 +64,7 @@ export class LoginUserRequest {
   password: string;
 }
 
-export class UpdateUserRequest {
+export class UpdateUserDto {
   @ApiProperty({
     type: String,
     example: 'new example',
