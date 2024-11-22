@@ -165,7 +165,7 @@ export class AddressService {
     user: User,
     contactId: number,
     addressId: number,
-  ): Promise<any> {
+  ): Promise<AddressDto> {
     const checkContactIsExistAndBelongsToUser =
       await this.checkContactIsExistAndBelongsToUser(contactId, user.id);
 
@@ -180,12 +180,10 @@ export class AddressService {
       throw new HttpException('Address not found', 404);
     }
 
-    await this.prismaService.address.delete({
+    return await this.prismaService.address.delete({
       where: {
         id: addressId,
       },
     });
-
-    return 'Address deleted successfully';
   }
 }

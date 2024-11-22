@@ -102,13 +102,9 @@ export class AddressController {
     @Param('contactId', ParseIntPipe) contactId: number,
     @Param('addressId', ParseIntPipe) addressId: number,
   ): Promise<BaseResponseDto<void>> {
-    const result = await this.addressService.deleteAddress(
-      user,
-      contactId,
-      addressId,
-    );
+    await this.addressService.deleteAddress(user, contactId, addressId);
     return {
-      message: result,
+      message: 'Address deleted successfully',
       data: null,
     };
   }
