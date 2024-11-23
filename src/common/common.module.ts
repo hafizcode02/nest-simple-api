@@ -12,6 +12,7 @@ import { MulterService } from './storage/multer.service';
 import { StorageProvider } from './storage/storage.provider';
 import { LocalStorageService } from './storage/vendors/local.service';
 import { CloudflareR2Service } from './storage/vendors/cloudflare-r2.service';
+import { AwsS3Service } from './storage/vendors/aws-s3.service';
 
 @Global()
 @Module({
@@ -45,6 +46,7 @@ import { CloudflareR2Service } from './storage/vendors/cloudflare-r2.service';
     StorageProvider,
     LocalStorageService,
     CloudflareR2Service,
+    AwsS3Service,
   ],
   exports: [
     PrismaService,
