@@ -57,7 +57,7 @@ My Learning Project in Nest.JS, Creating Simple Contact API
 
 - [ ] Make Endpoint for forgot password
 - [x] Setup Swagger UI
-- [ ] Create setup for multer to upload in cloud bucket like Cloudflare R2, AWS S3, or GCP Cloud Storage
+- [x] Create setup for multer to upload in cloud bucket like Cloudflare R2/AWS S3/GCP Cloud Storage
 
 ## Project Endpoint
 
