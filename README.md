@@ -87,6 +87,19 @@ MAIL_PASS=YourPassword
 
 # HASHIDS CONFIG
 HASHIDS_SALT=YOURSALT
+
+# STORAGE MODE
+STORAGE=local # (local, r2, gcp) local (local server), r2 (cloudflare), gcp(google cloud - soon)
+
+## LOCAL UPLOADS
+UPLOAD_DIR=uploads # Directory for local uploads
+
+## CLOUDFLARE R2 STORAGE
+CLOUDFLARE_R2_ENDPOINT=https://<your-account-id>.r2.cloudflarestorage.com
+CLOUDFLARE_R2_DEV_URL=<your-r2-dev-subdomain-public-url>
+CLOUDFLARE_R2_ACCESS_KEY=<your-access-key-id>
+CLOUDFLARE_R2_SECRET_KEY=<your-secret-access-key>
+CLOUDFLARE_R2_BUCKET=<your-bucket-name>
 ```
 
 ## Run Prisma
