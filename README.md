@@ -89,7 +89,7 @@ MAIL_PASS=YourPassword
 HASHIDS_SALT=YOURSALT
 
 # STORAGE MODE
-STORAGE=local # (local, r2, gcp) local (local server), r2 (cloudflare), gcp(google cloud - soon)
+STORAGE=local # (local, r2, s3, gcp) local (local server), r2 (cloudflare), s3 (aws), gcp(google cloud - soon)
 
 ## LOCAL UPLOADS
 UPLOAD_DIR=uploads # Directory for local uploads
@@ -100,6 +100,12 @@ CLOUDFLARE_R2_DEV_URL=<your-r2-dev-subdomain-public-url>
 CLOUDFLARE_R2_ACCESS_KEY=<your-access-key-id>
 CLOUDFLARE_R2_SECRET_KEY=<your-secret-access-key>
 CLOUDFLARE_R2_BUCKET=<your-bucket-name>
+
+## AWS S3 STORAGE
+AWS_REGION=us-west-2  # Replace with your actual region
+AWS_ACCESS_KEY_ID=your-access-key-id  # Replace with your actual access key ID
+AWS_SECRET_ACCESS_KEY=your-secret-access-key  # Replace with your actual secret access key
+AWS_BUCKET_NAME=your-s3-bucket-name  # Replace with your actual bucket name
 ```
 
 ## Run Prisma
