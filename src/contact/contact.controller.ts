@@ -27,8 +27,8 @@ import {
 } from './contact.dto';
 import { Auth } from '../common/auth/auth.decorator';
 import { User } from '@prisma/client';
-import { MulterService } from '../common/multer/multer.service';
-import { MulterInterceptor } from '../common/multer/multer.interceptor';
+import { MulterService } from '../common/storage/multer.service';
+import { MulterInterceptor } from '../common/storage/multer.interceptor';
 import { Request } from 'express';
 import { ApiBearerAuth } from '@nestjs/swagger';
 
@@ -142,13 +142,20 @@ export class ContactController {
     if (!file) {
       throw new HttpException('No file provided!', HttpStatus.BAD_REQUEST);
     }
-    const upload = this.multerService.saveFile(file);
+
+    let upload = null;
+    const checkContact = await this.contactService.getContact(user, contactId);
+    if (checkContact) {
+      upload = await this.multerService.saveFile(file);
+    }
+
     const result = await this.contactService.uploadImage(
       user,
       req,
       contactId,
       upload,
     );
+
     return {
       message: 'File uploaded successfully',
       data: result,

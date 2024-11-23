@@ -14,6 +14,7 @@ import { Logger } from 'winston';
 import { ContactValidation } from './contact.validation';
 import { Request } from 'express';
 import { BaseResponseDto } from 'src/common/dto/base.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class ContactService {
@@ -21,6 +22,7 @@ export class ContactService {
     private prismaService: PrismaService,
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
     private validationService: ValidationService,
+    private readonly configService: ConfigService,
   ) {}
 
   private toContactResponse(contact: Contact): ContactDto {
@@ -126,18 +128,17 @@ export class ContactService {
     contactId: number,
     filename: string,
   ): Promise<ImageContactDto> {
-    const contactExist = await this.checkContact(contactId, user.id);
-
-    if (!contactExist) {
-      throw new HttpException('Contact not found', HttpStatus.NOT_FOUND);
-    }
+    const storageType = this.configService.get<string>('STORAGE', 'local');
 
     const result = await this.prismaService.contact.update({
       where: {
         id: contactId,
       },
       data: {
-        photo: `${req.protocol}://${req.get('host')}/uploads/${filename}`,
+        photo:
+          storageType === 'local'
+            ? `${req.protocol}://${req.get('host')}/uploads/${filename}`
+            : filename,
       },
     });
 
