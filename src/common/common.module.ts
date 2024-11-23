@@ -8,7 +8,10 @@ import { ExceptionService } from './helper/exception.service';
 import { MailService } from './mail/mail.service';
 import { HashidService } from './helper/hashid.service';
 import { AuthMiddleware } from './auth/auth.middleware';
-import { MulterService } from './multer/multer.service';
+import { MulterService } from './storage/multer.service';
+import { StorageProvider } from './storage/storage.provider';
+import { LocalStorageService } from './storage/vendors/local.service';
+import { CloudflareR2Service } from './storage/vendors/cloudflare-r2.service';
 
 @Global()
 @Module({
@@ -39,6 +42,9 @@ import { MulterService } from './multer/multer.service';
     MailService,
     HashidService,
     MulterService,
+    StorageProvider,
+    LocalStorageService,
+    CloudflareR2Service,
   ],
   exports: [
     PrismaService,
@@ -46,6 +52,7 @@ import { MulterService } from './multer/multer.service';
     MailService,
     HashidService,
     MulterService,
+    StorageProvider,
   ],
 })
 export class CommonModule implements NestModule {

@@ -1,7 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { join } from 'path';
+import { memoryStorage } from 'multer';
 
 @Injectable()
 export class MulterInterceptor {
@@ -10,16 +9,8 @@ export class MulterInterceptor {
     fileTypes: string[];
     maxSize: number;
   }) {
-    return FileInterceptor('file', {
-      storage: diskStorage({
-        destination: join(__dirname, '../../../uploads'),
-        filename: (req, file, callback) => {
-          const timestamp = new Date().toISOString().replace(/[:.]/g, '-'); // Replace invalid characters for file names
-          const ext = file.originalname.split('.').pop(); // Extract file extension
-          const newFileName = `${timestamp}.${ext}`; // Save as timestamp.ext
-          callback(null, newFileName);
-        },
-      }),
+    return FileInterceptor(options.fieldName, {
+      storage: memoryStorage(),
       limits: {
         fileSize: options.maxSize,
       },
