@@ -135,13 +135,13 @@ export class ContactController {
   )
   @ApiConsumes('multipart/form-data')
   @ApiBody({
-    description: 'File upload',
+    description: 'File upload Contact Image (jpeg, jpg, png)',
     required: true,
     schema: {
       type: 'object',
       properties: {
         file: {
-          type: 'string',
+          type: 'file',
           format: 'binary',
         },
       },
