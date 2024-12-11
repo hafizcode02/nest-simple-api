@@ -30,7 +30,7 @@ import { User } from '@prisma/client';
 import { MulterService } from '../common/storage/multer.service';
 import { MulterInterceptor } from '../common/storage/multer.interceptor';
 import { Request } from 'express';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes } from '@nestjs/swagger';
 
 @ApiBearerAuth()
 @Controller('/api/contacts')
@@ -133,6 +133,20 @@ export class ContactController {
       maxSize: 1024 * 1024 * 5, // 5MB
     }),
   )
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'File upload',
+    required: true,
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
   async uploadContactImage(
     @Auth() user: User,
     @UploadedFile() file: Express.Multer.File,

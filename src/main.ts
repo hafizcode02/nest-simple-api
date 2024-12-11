@@ -16,7 +16,6 @@ async function bootstrap() {
     .setTitle('Contact App API')
     .setDescription('Contact App API')
     .setVersion('1.0')
-    .addTag('Contacts')
     .addBearerAuth()
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);

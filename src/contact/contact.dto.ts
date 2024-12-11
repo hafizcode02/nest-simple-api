@@ -35,11 +35,41 @@ export class CreateContactDto {
     example: '628712312312',
   })
   phone: string;
+
+  @ApiProperty({
+    example: 'https://example.com',
+    required: false,
+  })
   social_linkedin?: string;
+
+  @ApiProperty({
+    example: 'https://example.com',
+    required: false,
+  })
   social_fb?: string;
+
+  @ApiProperty({
+    example: 'https://example.com',
+    required: false,
+  })
   social_x?: string;
+
+  @ApiProperty({
+    example: 'https://example.com',
+    required: false,
+  })
   social_yt?: string;
+
+  @ApiProperty({
+    example: 'https://example.com',
+    required: false,
+  })
   social_ig?: string;
+
+  @ApiProperty({
+    example: 'https://example.com',
+    required: false,
+  })
   social_github?: string;
 }
 
@@ -63,11 +93,41 @@ export class UpdateContactDto {
     example: '6289876543211',
   })
   phone?: string;
+
+  @ApiProperty({
+    example: 'https://example.com',
+    required: false,
+  })
   social_linkedin?: string;
+
+  @ApiProperty({
+    example: 'https://example.com',
+    required: false,
+  })
   social_fb?: string;
+
+  @ApiProperty({
+    example: 'https://example.com',
+    required: false,
+  })
   social_x?: string;
+
+  @ApiProperty({
+    example: 'https://example.com',
+    required: false,
+  })
   social_yt?: string;
+
+  @ApiProperty({
+    example: 'https://example.com',
+    required: false,
+  })
   social_ig?: string;
+
+  @ApiProperty({
+    example: 'https://example.com',
+    required: false,
+  })
   social_github?: string;
 }
 
@@ -93,6 +153,16 @@ export class SearchContactDto {
     example: '628712312312',
   })
   phone?: string;
+
+  @ApiProperty({
+    example: 1,
+    required: false,
+  })
   page: number;
+
+  @ApiProperty({
+    example: 10,
+    required: false,
+  })
   size: number;
 }
