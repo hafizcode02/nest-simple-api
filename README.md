@@ -21,7 +21,7 @@
 
 ## Description
 
-My Learning Project in Nest.JS, Creating Simple Contact API
+My Learning Project in Nest.JS. Creating an Simple Contact API, this project including Authentication based on stored token on database and automatically logout if token is expired, specify which role that can accessed some routes (can be spesifically access by 1 role or multiple role), automatically sending verification email after register and after verifed, setup configuration for using multer uploads and save the file into local, or famous cloud storage (Cloudflare R2, AWS S3, Google Cloud Storage).
 
 ## Project Checklist
 
