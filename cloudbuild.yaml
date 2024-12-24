@@ -1,0 +1,52 @@
+steps:
+  # Step 1: Fetch the .env file from Secret Manager
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: 'Fetch .env from Secret Manager'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        gcloud secrets versions access latest --secret=SIMPLE_NEST_ENV > .env
+
+  # Step 2: Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'Build Docker Image'
+    args:
+      [
+        'build',
+        '-t',
+        'gcr.io/$PROJECT_ID/nest-simple-api:$COMMIT_SHA',
+        '.',
+      ]
+    volumes:
+      - name: 'env-volume'
+        path: '/workspace/.env'
+
+  # Step 3: Push the Docker image to Google Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'Push Docker Image'
+    args:
+      [
+        'push',
+        'gcr.io/$PROJECT_ID/nest-simple-api:$COMMIT_SHA',
+      ]
+
+  # Step 4: Deploy to Cloud Run
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: 'Deploy to Cloud Run'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        gcloud run deploy nest-simple-api \
+          --image gcr.io/$PROJECT_ID/nest-simple-api:$COMMIT_SHA \
+          --region us-central1 \
+          --cpu 1 \
+          --memory 1024Mi \
+          --allow-unauthenticated
+
+images:
+  - 'gcr.io/$PROJECT_ID/nest-simple-api:$COMMIT_SHA'
+
+# Optional: Specify a log bucket for build logs
+logsBucket: 'gs://nest-simple-api-buckets/logs'
