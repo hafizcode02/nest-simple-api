@@ -6,7 +6,7 @@ steps:
     args:
       - '-c'
       - |
-        gcloud secrets versions access latest --secret=SIMPLE_NEST_ENV > .env
+        gcloud secrets versions access latest --secret=SIMPLE_NEST_ENV > /workspace/.env
 
   # Step 2: Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
@@ -18,9 +18,6 @@ steps:
         'gcr.io/$PROJECT_ID/nest-simple-api:$COMMIT_SHA',
         '.',
       ]
-    volumes:
-      - name: 'env-volume'
-        path: '/workspace/.env'
 
   # Step 3: Push the Docker image to Google Container Registry
   - name: 'gcr.io/cloud-builders/docker'
