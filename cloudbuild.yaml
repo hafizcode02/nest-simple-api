@@ -49,4 +49,4 @@ images:
   - 'gcr.io/$PROJECT_ID/nest-simple-api:$COMMIT_SHA'
 
 # Optional: Specify a log bucket for build logs
-logsBucket: 'gs://nest-simple-api-buckets/logs'
+logsBucket: 'gs://mlwspace-bucket/logs'
