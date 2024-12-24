@@ -37,9 +37,6 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/node_modules ./node_modules
 
-# Install only production dependencies
-RUN npm ci --omit=dev
-
 # Expose the application's port
 EXPOSE 8080
 
