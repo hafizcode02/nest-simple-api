@@ -15,6 +15,7 @@ RUN npm install
 
 # Copy the Prisma schema and generate the Prisma client
 COPY prisma ./prisma
+COPY .env .env
 RUN npx prisma generate
 
 # Copy the application code
@@ -36,6 +37,7 @@ RUN apk add --no-cache openssl
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/.env .env
 
 # Expose the application's port
 EXPOSE 8080
