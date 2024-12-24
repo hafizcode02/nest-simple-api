@@ -13,6 +13,9 @@ RUN npm install
 # Copy the application code
 COPY . .
 
+# Copy the .env file into the container (optional if secrets are injected differently)
+COPY .env .env
+
 # Build the application
 RUN npm run build
 
@@ -28,9 +31,6 @@ COPY --from=builder /app/package*.json ./
 
 # Install only production dependencies
 RUN npm install --production
-
-# Copy the .env file into the container (optional if secrets are injected differently)
-COPY .env .env
 
 # Expose the application's port
 EXPOSE 8080
