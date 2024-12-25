@@ -17,6 +17,7 @@ RUN npm install
 COPY prisma ./prisma
 COPY .env .env
 RUN npx prisma generate
+RUN npx prisma db push
 
 # Copy the application code
 COPY . .
